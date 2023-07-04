@@ -94,8 +94,21 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
+  flutter_redux:
+    dependency: "direct main"
+    description:
+      name: flutter_redux
+      sha256: "8985fd9a4f4016be6acc058818b7bc4cd43f65d134e6507a6e017ac5b499cd82"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.2"
   flutter_test:
     dependency: "direct dev"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
@@ -103,7 +116,15 @@ packages:
     dependency: "direct main"
     description:
       name: google_fonts
-      sha256: "8f099045e2f2a30e4d4d0a35f40c6bc941a8f2ca0e10ad9d214ee9edd3f37483"
+      sha256: e20ff62b158b96f392bfc8afe29dee1503c94fbea2cbe8186fd59b756b8ae982
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.0"
+  hexcolor:
+    dependency: "direct main"
+    description:
+      name: hexcolor
+      sha256: c07f4bbb9095df87eeca87e7c69e8c3d60f70c66102d7b8d61c4af0453add3f6
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
@@ -111,10 +132,10 @@ packages:
     dependency: transitive
     description:
       name: http
-      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
+      sha256: "759d1a329847dd0f39226c688d3e06a6b8679668e350e2891a6474f8b4bb8525"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.6"
+    version: "1.1.0"
   http_parser:
     dependency: transitive
     description:
@@ -251,6 +272,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.4"
+  redux:
+    dependency: "direct main"
+    description:
+      name: redux
+      sha256: "1e86ed5b1a9a717922d0a0ca41f9bf49c1a587d50050e9426fc65b14e85ec4d7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.0"
+  redux_thunk:
+    dependency: "direct main"
+    description:
+      name: redux_thunk
+      sha256: ae7c41b1401f59440d6709741979a06b6e29cf7a2b00ec239149727340a35403
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0"
   sky_engine:
     dependency: transitive
     description: flutter
