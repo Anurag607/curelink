@@ -1,8 +1,7 @@
 import 'package:curelink/pages/chat_page.dart';
-import 'package:curelink/pages/profile_page.dart';
-import 'package:curelink/pages/schedule_page.dart';
+import 'package:curelink/pages/store_page.dart';
+import 'package:curelink/widgets/hidden_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:curelink/pages/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -22,6 +21,12 @@ class MyApp extends StatelessWidget {
     initialState: NavigationState(tabIndex: 0),
   );
 
+  static const List<Widget> _widgetOptions = <Widget>[
+    HiddenDrawer(),
+    StorePage(),
+    ChatPage(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return StoreProvider(
@@ -34,15 +39,15 @@ class MyApp extends StatelessWidget {
               textTheme: GoogleFonts.comfortaaTextTheme(
                 Theme.of(context).textTheme,
               ),
-              scaffoldBackgroundColor: HexColor("#fefefe"),
+              scaffoldBackgroundColor: HexColor("#f6f8fe"),
               useMaterial3: true,
             ),
             initialRoute: '/',
             routes: {
-              '/': ((context) => const HomePage(title: 'CureLink')),
-              '/schedule': ((context) => const SchedulePage()),
-              '/chat': ((context) => const ChatPage()),
-              '/profile': ((context) => const ProfilePage()),
+              '/': ((context) => StoreConnector<NavigationState, int>(
+                  converter: (store) => store.state.tabIndex,
+                  builder: (context, int stateNavigationIndex) =>
+                      _widgetOptions[stateNavigationIndex])),
             }));
   }
 }

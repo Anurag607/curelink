@@ -2,13 +2,13 @@ import 'package:curelink/widgets/custom_bottomnavbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
+class StorePage extends StatefulWidget {
+  const StorePage({super.key});
   @override
-  State<ChatPage> createState() => _ChatPageState();
+  State<StorePage> createState() => _StorePageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _StorePageState extends State<StorePage> {
   final List<dynamic> _gradientList = [
     [HexColor("#AD1DEB"), HexColor("#6E72FC")],
     [HexColor("#5D3FD3"), HexColor("#1FD1F9")],
@@ -31,14 +31,13 @@ class _ChatPageState extends State<ChatPage> {
             const SizedBox(height: 50),
             SizedBox(
                 height: 60,
-                child: Text("Messages",
+                child: Text("Store",
                     style: TextStyle(
                         fontSize: 25,
                         color: HexColor("#f6f8fe"),
                         fontWeight: FontWeight.bold))),
             Expanded(
                 child: Container(
-              clipBehavior: Clip.antiAlias,
               width: double.infinity,
               decoration: BoxDecoration(
                 color: HexColor("#f6f8fe"),
@@ -50,7 +49,7 @@ class _ChatPageState extends State<ChatPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Chat Page',
+                    'Store Page',
                   ),
                 ],
               ),

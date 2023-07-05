@@ -32,7 +32,7 @@ class _NearbyDoctorsState extends State<NearbyDoctors> {
     },
   ];
 
-  void _updateDoctorList(List data) {
+  void updateDoctorList(List data) {
     setState(() {
       doctors = data.reversed.toList();
     });
@@ -50,7 +50,7 @@ class _NearbyDoctorsState extends State<NearbyDoctors> {
               const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text("Nearby Doctors",
+                  Text("Doctors of the day",
                       style: TextStyle(
                         fontSize: 23,
                         fontWeight: FontWeight.w900,

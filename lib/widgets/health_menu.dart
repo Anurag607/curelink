@@ -22,7 +22,9 @@ class HealthMenu {
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Icon(Ionicons.shield_checkmark_outline, size: 28),
+                    Padding(
+                        padding: EdgeInsets.only(bottom: 4),
+                        child: Icon(Ionicons.shield_checkmark, size: 28)),
                     SizedBox(width: 10),
                     Text("Health Needs",
                         style: TextStyle(

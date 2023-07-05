@@ -27,15 +27,22 @@ class DoctorCards extends StatelessWidget {
             decoration: BoxDecoration(
               color: HexColor("#f6f8fe"),
               borderRadius: const BorderRadius.all(Radius.circular(20)),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x3f000000),
+                  blurRadius: 0,
+                  offset: Offset(0, 0),
+                ),
+              ],
             ),
             child: Container(
                 width: double.infinity,
-                height: 140,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Image Section ...
                     ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(16)),
                       child: Image.asset(
@@ -48,6 +55,7 @@ class DoctorCards extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
+                    // Name and Desc Section ...
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -66,6 +74,7 @@ class DoctorCards extends StatelessWidget {
                                   color: Colors.black54,
                                 ))),
                         const SizedBox(height: 18),
+                        // Rating and Reviews Container...
                         Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 6, vertical: 8),
