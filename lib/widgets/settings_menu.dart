@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:ionicons/Ionicons.dart';
+// import 'package:ionicons/Ionicons.dart';
 
 class SettingsMenu {
   // ignore: non_constant_identifier_names

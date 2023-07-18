@@ -39,22 +39,22 @@ class HealthNeeds extends StatelessWidget {
     final List secondaryList1 = [
       {
         "name": "Appointments",
-        "image": "assets/appointment.png",
+        "image": "assets/icons/appointment.png",
         "onPressFunction": onDemo,
       },
       {
         "name": "Hospitals",
-        "image": "assets/hospital.png",
+        "image": "assets/icons/hospital.png",
         "onPressFunction": onDemo,
       },
       {
         "name": "Medicines",
-        "image": "assets/drug.png",
+        "image": "assets/icons/drug.png",
         "onPressFunction": onDemo,
       },
       {
         "name": "Covid-19",
-        "image": "assets/virus.png",
+        "image": "assets/icons/virus.png",
         "onPressFunction": onDemo,
       },
     ];
@@ -62,22 +62,22 @@ class HealthNeeds extends StatelessWidget {
     final List secondaryList2 = [
       {
         "name": "Diabetes",
-        "image": "assets/blood.png",
+        "image": "assets/icons/blood.png",
         "onPressFunction": onDemo,
       },
       {
         "name": "Health Care",
-        "image": "assets/health_care.png",
+        "image": "assets/icons/health_care.png",
         "onPressFunction": onDemo,
       },
       {
         "name": "Dental",
-        "image": "assets/tooth.png",
+        "image": "assets/icons/tooth.png",
         "onPressFunction": onDemo,
       },
       {
         "name": "Insured",
-        "image": "assets/insurance.png",
+        "image": "assets/icons/insurance.png",
         "onPressFunction": onDemo,
       },
     ];
@@ -89,67 +89,72 @@ class HealthNeeds extends StatelessWidget {
     final List mainList = [
       {
         "name": "Appointments",
-        "image": "assets/appointment.png",
+        "image": "assets/icons/appointment.png",
         "onPressFunction": onPressAppointment,
       },
       {
         "name": "Hospitals",
-        "image": "assets/hospital.png",
+        "image": "assets/icons/hospital.png",
         "onPressFunction": onPressHospital,
       },
       {
         "name": "Medicines",
-        "image": "assets/drug.png",
+        "image": "assets/icons/drug.png",
         "onPressFunction": onPressMedicine,
       },
       {
         "name": "More",
-        "image": "assets/more.png",
+        "image": "assets/icons/more.png",
         "onPressFunction": onPressMore,
       },
     ];
 
     return Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
-        child: Column(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                      padding: EdgeInsets.only(bottom: 4),
-                      child: Icon(Ionicons.shield_checkmark, size: 28)),
-                  SizedBox(width: 10),
-                  Text("Health Needs",
-                      style: TextStyle(
-                        fontSize: 23,
-                        fontWeight: FontWeight.w900,
-                      )),
-                ],
+              Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Ionicons.shield_checkmark, size: 28)),
+              SizedBox(width: 10),
+              Text(
+                "Health Needs",
+                style: TextStyle(
+                  fontSize: 23,
+                  fontWeight: FontWeight.w900,
+                ),
               ),
-              const SizedBox(width: double.infinity, height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  for (var index = 0; index < mainList.length; index++)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        if (index != 0) const SizedBox(width: 16),
-                        CustomIcon(
-                            icon: mainList[index]["image"],
-                            text: mainList[index]["name"],
-                            onPressFunction: () =>
-                                mainList[index]["onPressFunction"](context)),
-                      ],
-                    )
-                ],
-              ),
-            ]));
+            ],
+          ),
+          const SizedBox(width: double.infinity, height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              for (var index = 0; index < mainList.length; index++)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (index != 0) const SizedBox(width: 12),
+                    CustomIcon(
+                      icon: mainList[index]["image"],
+                      text: mainList[index]["name"],
+                      onPressFunction: () =>
+                          mainList[index]["onPressFunction"](context),
+                    ),
+                  ],
+                )
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -56,8 +56,8 @@ class _UpcomingCardState extends State<UpcomingCard> {
                 ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(16)),
                   child: Image.asset(
-                    "assets/doctor_3.jpg",
-                    width: 80,
+                    "assets/avaters/doctor_3.jpg",
+                    width: 70,
                     height: 94,
                     fit: BoxFit.cover,
                     repeat: ImageRepeat.noRepeat,
@@ -68,6 +68,7 @@ class _UpcomingCardState extends State<UpcomingCard> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 5),
                     const Padding(
                         padding: EdgeInsets.only(bottom: 5),
                         child: Text("Dr. Adison Ashley",
@@ -85,26 +86,30 @@ class _UpcomingCardState extends State<UpcomingCard> {
                     const SizedBox(height: 18),
                     Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 8),
+                            horizontal: 8, vertical: 8),
                         decoration: const BoxDecoration(
                           color: Colors.white10,
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                         child: const Row(children: [
-                          Icon(Ionicons.calendar_outline,
-                              color: Colors.white, size: 16),
-                          SizedBox(width: 6),
                           Padding(
-                            padding: EdgeInsets.only(right: 14, left: 0),
+                              padding: EdgeInsets.only(bottom: 3),
+                              child: Icon(Ionicons.calendar_outline,
+                                  color: Colors.white, size: 16)),
+                          SizedBox(width: 4),
+                          Padding(
+                            padding: EdgeInsets.only(right: 6, left: 0),
                             child: Text("Today",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
                                 )),
                           ),
-                          Icon(Ionicons.time_outline,
-                              color: Colors.white, size: 16),
-                          SizedBox(width: 6),
+                          Padding(
+                              padding: EdgeInsets.only(bottom: 3),
+                              child: Icon(Ionicons.time_outline,
+                                  color: Colors.white, size: 16)),
+                          SizedBox(width: 4),
                           Padding(
                             padding: EdgeInsets.only(right: 0, left: 0),
                             child: Text("14:00 - 15:30 AM",

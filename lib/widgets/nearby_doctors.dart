@@ -14,21 +14,21 @@ class _NearbyDoctorsState extends State<NearbyDoctors> {
       "desc": "Cardiologist",
       "rating": "4.5",
       "reviews": "451",
-      "image": "assets/doctor_1.jpg"
+      "image": "assets/avaters/doctor_1.jpg"
     },
     {
       "name": "Dr. Anthony Leeway",
       "desc": "Dental Specialist",
       "rating": "4.0",
       "reviews": "122",
-      "image": "assets/doctor_2.jpg"
+      "image": "assets/avaters/doctor_2.jpg"
     },
     {
       "name": "Dr. Adison Ashley",
       "desc": "Dental Specialist",
       "rating": "4.2",
       "reviews": "258",
-      "image": "assets/doctor_3.jpg"
+      "image": "assets/avaters/doctor_3.jpg"
     },
   ];
 

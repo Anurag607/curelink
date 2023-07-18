@@ -1,13 +1,10 @@
-// ignore_for_file: avoid_print
-
 import 'dart:collection';
 
+import 'package:curelink/utils/appointments.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-import '../utils.dart';
 
 class Calendar extends StatefulWidget {
   const Calendar({super.key});
@@ -25,7 +22,7 @@ class _CalendarState extends State<Calendar> {
   );
 
   late PageController _pageController;
-  CalendarFormat _calendarFormat = CalendarFormat.month;
+  CalendarFormat _calendarFormat = CalendarFormat.week;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
@@ -159,7 +156,7 @@ class _CalendarState extends State<Calendar> {
             selectedDayPredicate: (day) => _selectedDays.contains(day),
             rangeStartDay: _rangeStart,
             rangeEndDay: _rangeEnd,
-            calendarFormat: _calendarFormat,
+            calendarFormat: CalendarFormat.week,
             rangeSelectionMode: _rangeSelectionMode,
             eventLoader: _getAppointmentsForDay,
             onDaySelected: _onDaySelected,
@@ -175,7 +172,7 @@ class _CalendarState extends State<Calendar> {
         ),
         const SizedBox(height: 8.0),
         // Appointments Card...
-        Expanded(
+        SingleChildScrollView(
           child: ValueListenableBuilder<List<Appointment>>(
             valueListenable: _selectedAppointments,
             builder: (context, value, _) {

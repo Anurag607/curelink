@@ -14,7 +14,7 @@ class HealthMenu {
           return Container(
             height: 350,
             width: double.infinity,
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +43,7 @@ class HealthMenu {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          if (index != 0) const SizedBox(width: 16),
+                          if (index != 0) const SizedBox(width: 14),
                           CustomIcon(
                               icon: secondaryList1[index]["image"],
                               text: secondaryList1[index]["name"],
@@ -77,7 +77,7 @@ class HealthMenu {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           if (index != 0)
-                            const SizedBox(width: 24)
+                            const SizedBox(width: 16)
                           else
                             const SizedBox(width: 16),
                           CustomIcon(

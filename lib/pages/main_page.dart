@@ -1,0 +1,250 @@
+import 'dart:math';
+
+import 'package:curelink/Templates/standard_screen.dart';
+import 'package:curelink/components/top_bar.dart';
+import 'package:curelink/redux/states/navigation_state.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:rive/rive.dart';
+import 'package:swipe_to/swipe_to.dart';
+import 'package:curelink/pages/home_page.dart';
+import 'package:curelink/widgets/custom_bottomnavbar.dart';
+import '../../models/menu.dart';
+import 'package:curelink/components/menu_btn.dart';
+import 'package:curelink/components/side_bar.dart';
+
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage>
+    with SingleTickerProviderStateMixin {
+  User? currentUser;
+
+  Future<FirebaseApp> _initializeFirebase() async {
+    FirebaseApp firebaseApp = await Firebase.initializeApp();
+
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      // Navigator.pushNamed(context, '/login');
+    } else {
+      currentUser = user;
+    }
+
+    return firebaseApp;
+  }
+
+  static final GlobalKey<ScaffoldState> _scaffoldKey =
+      GlobalKey<ScaffoldState>();
+
+  bool isSideBarOpen = false;
+  Menu selectedSideMenu = sidebarMenus.first;
+  late SMIBool isMenuOpenInput;
+
+  // Animation Controllers...
+  late final AnimationController _animationController = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 200))
+    ..addListener(
+      () {
+        setState(() {});
+      },
+    );
+
+  // Animations...
+  late final Animation<double> scalAnimation = Tween<double>(begin: 1, end: 0.8)
+      .animate(CurvedAnimation(
+          parent: _animationController, curve: Curves.fastOutSlowIn));
+
+  late final Animation<double> animation = Tween<double>(begin: 0, end: 1)
+      .animate(CurvedAnimation(
+          parent: _animationController, curve: Curves.fastOutSlowIn));
+
+  Widget child = Container(
+    height: 1000,
+    width: double.infinity,
+    color: Colors.transparent,
+  );
+
+  late List<Widget> _widgetOptions = <Widget>[];
+
+  @override
+  void initState() {
+    _widgetOptions = [
+      ThemedScreen(
+        topBar: TopBar(user: currentUser),
+        child: const HomePage(),
+      ),
+      ThemedScreen(
+        topBar: Text(
+          "Store",
+          style: TextStyle(
+              fontSize: 25,
+              color: HexColor("#f6f8fe"),
+              fontWeight: FontWeight.bold),
+        ),
+        child: Container(),
+      ),
+      ThemedScreen(
+        topBar: Text(
+          "Chat",
+          style: TextStyle(
+              fontSize: 25,
+              color: HexColor("#f6f8fe"),
+              fontWeight: FontWeight.bold),
+        ),
+        child: Container(),
+      ),
+    ];
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _initializeFirebase(),
+      builder: ((context, snapshot) {
+        if (currentUser != null) {
+          return const Center(child: CircularProgressIndicator());
+        } else {
+          return StoreConnector<NavigationState, int>(
+            converter: (store) => store.state.tabIndex,
+            builder: (context, int stateNavigationIndex) => Scaffold(
+              key: _scaffoldKey,
+              backgroundColor: HexColor("#666fdb"),
+              body: SwipeTo(
+                iconColor: Colors.transparent,
+                onRightSwipe: () {
+                  isMenuOpenInput.value = true;
+                  _animationController.forward();
+                  setState(
+                    () {
+                      isSideBarOpen = true;
+                    },
+                  );
+                },
+                onLeftSwipe: () {
+                  isMenuOpenInput.value = false;
+                  _animationController.reverse();
+                  setState(
+                    () {
+                      isSideBarOpen = false;
+                    },
+                  );
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height,
+                  color: Colors.transparent,
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        color: Colors.transparent,
+                        child: Transform(
+                          alignment: Alignment.center,
+                          transform: Matrix4.identity()
+                            ..setEntry(3, 2, 0.001)
+                            ..rotateY(1 * animation.value -
+                                30 * (animation.value) * pi / 180),
+                          child: Transform.translate(
+                            offset: Offset(animation.value * 265, 0),
+                            child: Transform.scale(
+                              scale: scalAnimation.value,
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(30),
+                                ),
+                                child: SingleChildScrollView(
+                                  clipBehavior: Clip.antiAlias,
+                                  scrollDirection: Axis.vertical,
+                                  physics: const BouncingScrollPhysics(),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height:
+                                        MediaQuery.of(context).size.height - 50,
+                                    color: Colors.transparent,
+                                    child: _widgetOptions[stateNavigationIndex],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      AnimatedPositioned(
+                        width: 288,
+                        height: MediaQuery.of(context).size.height,
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.fastOutSlowIn,
+                        left: isSideBarOpen ? 0 : -288,
+                        top: 0,
+                        child: SideBar(closeSidebar: () {
+                          _animationController.reverse();
+                          setState(
+                            () {
+                              isSideBarOpen = false;
+                            },
+                          );
+                        }),
+                      ),
+                      AnimatedPositioned(
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.fastOutSlowIn,
+                        left: isSideBarOpen ? 220 : 0,
+                        top: 16,
+                        child: MenuBtn(
+                          press: () {
+                            isMenuOpenInput.value = !isMenuOpenInput.value;
+
+                            if (_animationController.value == 0) {
+                              _animationController.forward();
+                            } else {
+                              _animationController.reverse();
+                            }
+
+                            setState(
+                              () {
+                                isSideBarOpen = !isSideBarOpen;
+                              },
+                            );
+                          },
+                          hide: isSideBarOpen && false,
+                          riveOnInit: (artboard) {
+                            final controller =
+                                StateMachineController.fromArtboard(
+                                    artboard, "State Machine");
+
+                            artboard.addController(controller!);
+
+                            isMenuOpenInput =
+                                controller.findInput<bool>("isOpen") as SMIBool;
+                            isMenuOpenInput.value = true;
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              bottomNavigationBar: CurvedBottomNavBar(animation: animation),
+            ),
+          );
+        }
+      }),
+    );
+  }
+}
