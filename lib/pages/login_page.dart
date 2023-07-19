@@ -2,6 +2,7 @@
 
 import 'package:curelink/Animations/fade_animation.dart';
 import 'package:curelink/Firebase/fire_auth.dart';
+import 'package:curelink/utils/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,8 @@ class _LoginPageState extends State<LoginPage> {
   final _focusPassword = FocusNode();
 
   bool _isProcessing = false;
+
+  CureLinkDatabase db = CureLinkDatabase();
 
   Future<FirebaseApp> _initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
@@ -198,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                                                   _isProcessing = true;
                                                 });
 
-                                                User? user = await FireAuth
+                                                await FireAuth
                                                     .signInUsingEmailPassword(
                                                   email:
                                                       _emailTextController.text,
@@ -206,16 +209,20 @@ class _LoginPageState extends State<LoginPage> {
                                                       _passwordTextController
                                                           .text,
                                                   context: context,
-                                                );
+                                                ).then((value) => {
+                                                      db.saveUserDetails({
+                                                        "displayName":
+                                                            value!.displayName,
+                                                        "email": value.email,
+                                                        "auth_uid": value.uid,
+                                                        "phoneNumber":
+                                                            value.phoneNumber,
+                                                      })
+                                                    });
 
                                                 setState(() {
                                                   _isProcessing = false;
                                                 });
-
-                                                if (user != null) {
-                                                  Navigator.pushNamed(
-                                                      context, '/');
-                                                }
                                               }
                                             },
                                             child: Container(

@@ -9,6 +9,13 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
+  final List<dynamic> _gradientList = [
+    [HexColor("#AD1DEB"), HexColor("#6E72FC")],
+    [HexColor("#5D3FD3"), HexColor("#1FD1F9")],
+    [HexColor("#B621FE"), HexColor("#1FD1F9")],
+    [HexColor("#E975A8"), HexColor("#726CF8")],
+  ];
+
   List appointments = [
     {
       "name": "Dr. Brijesh Patel",
@@ -41,31 +48,50 @@ class _SchedulePageState extends State<SchedulePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
         clipBehavior: Clip.antiAlias,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: HexColor("#f6f8fe"),
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(50), topRight: Radius.circular(50)),
+          gradient: LinearGradient(
+            begin: const Alignment(-1, -1),
+            end: const Alignment(1, 1),
+            colors: _gradientList[1],
+          ),
         ),
-        child: const Calendar());
-    // ListView.builder(
-    //     padding: const EdgeInsets.symmetric(horizontal: 0),
-    //     itemCount: appointments.length,
-    //     physics: const ScrollPhysics(),
-    //     scrollDirection: Axis.vertical,
-    //     shrinkWrap: true,
-    //     itemBuilder: (BuildContext context, index) {
-    //       return Column(children: [
-    //         AppointmentCards(
-    //             name: appointments[index]["name"],
-    //             desc: appointments[index]["desc"],
-    //             appointmentDate: appointments[index]["appointmentDate"],
-    //             appointmentTime: appointments[index]["appointmentTime"],
-    //             image: appointments[index]["image"]),
-    //         const SizedBox(width: double.infinity, height: 16),
-    //       ]);
-    //     })
+        child: Column(
+          children: [
+            const SizedBox(height: 80),
+            SizedBox(
+              height: 60,
+              child: Text(
+                "Schedule",
+                style: TextStyle(
+                  fontSize: 25,
+                  color: HexColor("#f6f8fe"),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Container(
+              clipBehavior: Clip.antiAlias,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height - 140,
+              decoration: BoxDecoration(
+                color: HexColor("#f6f8fe"),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(50),
+                  topRight: Radius.circular(50),
+                ),
+              ),
+              child: const SingleChildScrollView(
+                child: Calendar(),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

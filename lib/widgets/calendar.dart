@@ -1,10 +1,19 @@
+// ignore_for_file: avoid_print
+
 import 'dart:collection';
 
-import 'package:curelink/utils/appointments.dart';
+import 'package:curelink/components/add_appointment_form.dart';
+import 'package:curelink/components/appointment_cards.dart';
+import 'package:curelink/components/custom_modal_bottom_sheet.dart';
+import 'package:curelink/utils/database.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:curelink/utils/appointments.dart';
+import 'dart:developer';
 
 class Calendar extends StatefulWidget {
   const Calendar({super.key});
@@ -13,20 +22,58 @@ class Calendar extends StatefulWidget {
   State<Calendar> createState() => _CalendarState();
 }
 
-class _CalendarState extends State<Calendar> {
-  late final ValueNotifier<List<Appointment>> _selectedAppointments;
+class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
+  final _curelinkData = Hive.box('curelinkData');
+  CureLinkDatabase db = CureLinkDatabase();
+
+  late final ValueNotifier<List<dynamic>> _selectedAppointments;
   final ValueNotifier<DateTime> _focusedDay = ValueNotifier(DateTime.now());
   final Set<DateTime> _selectedDays = LinkedHashSet<DateTime>(
     equals: isSameDay,
     hashCode: getHashCode,
   );
 
+  // Controller for navigating the calendar pages gets initialized on calendar table creation...
   late PageController _pageController;
+
+  // Determinees the format in which calendar is viewed on device, possible options are: week, month, twoWeeks...
   CalendarFormat _calendarFormat = CalendarFormat.week;
+
+  // Determines the range selection mode, possible options are: toggledOn, toggledOff, selected, unselected...
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
+
+  // Variables to store the range limits...
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
 
+  String _extractedDay(DateTime day) {
+    return DateFormat('yyyy-MM-dd').format(day.toLocal());
+  }
+
+  late final AnimationController _opacityControllerAddPrompt =
+      AnimationController(
+    duration: const Duration(seconds: 1),
+    vsync: this,
+  )..forward();
+
+  late final AnimationController _opacityControllerAddAppointments =
+      AnimationController(
+    duration: const Duration(seconds: 1),
+    vsync: this,
+  )..forward();
+
+  late final Animation<double> _opacityAnimationAddPrompt = CurvedAnimation(
+    parent: _opacityControllerAddPrompt,
+    curve: Curves.easeIn,
+  );
+
+  late final Animation<double> _opacityAnimationAddAppointments =
+      CurvedAnimation(
+    parent: _opacityControllerAddAppointments,
+    curve: Curves.easeIn,
+  );
+
+  // To initialize the state objects ...
   @override
   void initState() {
     super.initState();
@@ -46,30 +93,39 @@ class _CalendarState extends State<Calendar> {
   bool get canClearSelection =>
       _selectedDays.isNotEmpty || _rangeStart != null || _rangeEnd != null;
 
-  List<Appointment> _getAppointmentsForDay(DateTime day) {
+  List<dynamic> _getAppointmentsForDay(DateTime day) {
     return kAppointments[day] ?? [];
   }
 
-  List<Appointment> _getAppointmentsForDays(Iterable<DateTime> days) {
+  // List containing the appointment list for the selected day (single day)...
+  List<dynamic> _getAppointmentsForDays(Iterable<DateTime> days) {
     return [
       for (final d in days) ..._getAppointmentsForDay(d),
     ];
   }
 
-  List<Appointment> _getAppointmentsForRange(DateTime start, DateTime end) {
+  // List containing the appointment list for the selected range of days...
+  List<dynamic> _getAppointmentsForRange(DateTime start, DateTime end) {
     final days = daysInRange(start, end);
     return _getAppointmentsForDays(days);
   }
 
+  // Function running on the selection of a day...
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     setState(() {
+      // If the selected day is already selected, then remove it from the list of selected days else add it...
       if (_selectedDays.contains(selectedDay)) {
-        _selectedDays.remove(selectedDay);
+        if (_selectedDays.length > 1) {
+          _selectedDays.remove(selectedDay);
+        }
       } else {
         _selectedDays.add(selectedDay);
       }
 
-      _focusedDay.value = focusedDay;
+      // Update the focused day...
+      _focusedDay.value = _selectedDays.last;
+
+      // Reset the range selection mode and range limits...
       _rangeStart = null;
       _rangeEnd = null;
       _rangeSelectionMode = RangeSelectionMode.toggledOff;
@@ -78,15 +134,21 @@ class _CalendarState extends State<Calendar> {
     _selectedAppointments.value = _getAppointmentsForDays(_selectedDays);
   }
 
+  // Function running on the selection of a range of days...
   void _onRangeSelected(DateTime? start, DateTime? end, DateTime focusedDay) {
     setState(() {
+      // Update the focused day...
       _focusedDay.value = focusedDay;
+      // Update the range limits...
       _rangeStart = start;
       _rangeEnd = end;
+      // Reset the selected days list...
       _selectedDays.clear();
+      // Update the range selection mode...
       _rangeSelectionMode = RangeSelectionMode.toggledOn;
     });
 
+    // Update the appointment list conditionally depending upon the range...
     if (start != null && end != null) {
       _selectedAppointments.value = _getAppointmentsForRange(start, end);
     } else if (start != null) {
@@ -113,10 +175,13 @@ class _CalendarState extends State<Calendar> {
               },
               onClearButtonTap: () {
                 setState(() {
+                  _focusedDay.value = DateTime.now();
                   _rangeStart = null;
                   _rangeEnd = null;
                   _selectedDays.clear();
-                  _selectedAppointments.value = [];
+                  _selectedDays.add(_focusedDay.value);
+                  _selectedAppointments.value =
+                      _getAppointmentsForDay(_focusedDay.value);
                 });
               },
               onLeftArrowTap: () {
@@ -136,6 +201,7 @@ class _CalendarState extends State<Calendar> {
         ),
         // Calendar...
         Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: HexColor("#f6f8fe"),
@@ -148,7 +214,7 @@ class _CalendarState extends State<Calendar> {
               ),
             ],
           ),
-          child: TableCalendar<Appointment>(
+          child: TableCalendar<dynamic>(
             firstDay: kFirstDay,
             lastDay: kLastDay,
             focusedDay: _focusedDay.value,
@@ -156,7 +222,7 @@ class _CalendarState extends State<Calendar> {
             selectedDayPredicate: (day) => _selectedDays.contains(day),
             rangeStartDay: _rangeStart,
             rangeEndDay: _rangeEnd,
-            calendarFormat: CalendarFormat.week,
+            calendarFormat: _calendarFormat,
             rangeSelectionMode: _rangeSelectionMode,
             eventLoader: _getAppointmentsForDay,
             onDaySelected: _onDaySelected,
@@ -164,41 +230,157 @@ class _CalendarState extends State<Calendar> {
             onCalendarCreated: (controller) => _pageController = controller,
             onPageChanged: (focusedDay) => _focusedDay.value = focusedDay,
             onFormatChanged: (format) {
+              if (format == CalendarFormat.month) {
+                return;
+              }
               if (_calendarFormat != format) {
                 setState(() => _calendarFormat = format);
               }
             },
+            calendarStyle: CalendarStyle(
+              todayDecoration: BoxDecoration(
+                color: Colors.amber[900],
+                shape: BoxShape.circle,
+              ),
+            ),
           ),
         ),
         const SizedBox(height: 8.0),
         // Appointments Card...
-        SingleChildScrollView(
-          child: ValueListenableBuilder<List<Appointment>>(
-            valueListenable: _selectedAppointments,
-            builder: (context, value, _) {
-              return ListView.builder(
-                itemCount: value.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 12.0,
-                      vertical: 4.0,
+        (_selectedAppointments.value.isEmpty)
+            ? FadeTransition(
+                opacity: CurvedAnimation(
+                  parent: _opacityAnimationAddPrompt,
+                  curve: Curves.easeIn,
+                ),
+                child: bookAnAppointmentPrompt(),
+              )
+            : SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.6,
+                child: SingleChildScrollView(
+                  child: FadeTransition(
+                    opacity: CurvedAnimation(
+                      parent: _opacityAnimationAddAppointments,
+                      curve: Curves.easeIn,
                     ),
-                    decoration: BoxDecoration(
-                      border: Border.all(),
-                      borderRadius: BorderRadius.circular(12.0),
+                    child: Expanded(
+                      child: Column(
+                        children: [
+                          ValueListenableBuilder<List<dynamic>>(
+                            valueListenable: _selectedAppointments,
+                            builder: (context, value, _) {
+                              return ListView.builder(
+                                itemCount: value.length,
+                                physics: const BouncingScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemBuilder: (BuildContext context, index) {
+                                  return Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child: AppointmentCards(
+                                      name: value[index]["name"],
+                                      desc: value[index]["desc"],
+                                      appointmentDate: value[index]
+                                          ["appointmentDate"],
+                                      appointmentTime: value[index]
+                                          ["appointmentTime"],
+                                      image: value[index]["image"],
+                                      actions: true,
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                      ),
                     ),
-                    child: ListTile(
-                      onTap: () => print('${value[index]}'),
-                      title: Text('${value[index]}'),
+                  ),
+                ),
+              ),
+      ],
+    );
+  }
+
+  Widget bookAnAppointmentPrompt() {
+    return FadeTransition(
+      opacity: _opacityAnimationAddPrompt,
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 150,
+        padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.only(top: 20),
+        decoration: BoxDecoration(
+          color: HexColor("f6f8fe"),
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x3f000000),
+              blurRadius: 4,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "No Appointments scheduled for ${DateFormat.yMd().format(_focusedDay.value) == DateFormat.yMd().format(DateTime.now()) ? "Today" : "this day"}!",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.quicksand(
+                  textStyle: TextStyle(
+                      color: HexColor("#1a1a1c").withOpacity(0.75),
+                      fontSize: 19,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              ElevatedButton.icon(
+                onPressed: () {
+                  CustomBottomModalSheet.customBottomModalSheet(
+                    context,
+                    400,
+                    AddAppointmentForm(
+                      dateString: _extractedDay(_focusedDay.value),
                     ),
                   );
                 },
-              );
-            },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: HexColor("#5D3FD3"),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(25),
+                      bottomRight: Radius.circular(25),
+                      bottomLeft: Radius.circular(25),
+                    ),
+                  ),
+                ),
+                icon: Icon(
+                  Icons.schedule,
+                  color: HexColor("#f6f8fe"),
+                ),
+                label: const Text(
+                  "Schedule an Appointment",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 }
@@ -226,7 +408,7 @@ class _CalendarHeader extends StatelessWidget {
     final headerText = DateFormat.yMMM().format(focusedDay);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Row(
         children: [
           const SizedBox(width: 16.0),

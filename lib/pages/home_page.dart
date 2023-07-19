@@ -20,39 +20,38 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        clipBehavior: Clip.antiAlias,
+      width: double.infinity,
+      clipBehavior: Clip.antiAlias,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+      decoration: BoxDecoration(
+        color: HexColor("#f6f8fe").withOpacity(1),
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(35),
+        ),
+      ),
+      child: SizedBox(
         width: double.infinity,
-        decoration: BoxDecoration(
-          color: HexColor("#E6E6FA").withOpacity(0.5),
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(35),
+        height: MediaQuery.of(context).size.height - 75,
+        child: const SingleChildScrollView(
+          clipBehavior: Clip.antiAlias,
+          scrollDirection: Axis.vertical,
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              // Upcoming Cards
+              SizedBox(width: double.infinity, height: 20),
+              UpcomingCard(),
+              // Health Needs
+              SizedBox(width: double.infinity, height: 10),
+              HealthNeeds(),
+              // Nearby Doctors
+              SizedBox(width: double.infinity, height: 10),
+              NearbyDoctors(),
+              SizedBox(width: double.infinity, height: 150),
+            ],
           ),
         ),
-        child: Container(
-          clipBehavior: Clip.antiAlias,
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-          decoration: BoxDecoration(
-            color: HexColor("#f6f8fe").withOpacity(1),
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(35),
-            ),
-          ),
-          child: const SingleChildScrollView(
-            child: Column(
-              children: [
-                // Upcoming Cards
-                SizedBox(width: double.infinity, height: 30),
-                UpcomingCard(),
-                // Health Needs
-                SizedBox(width: double.infinity, height: 10),
-                HealthNeeds(),
-                // Nearby Doctors
-                SizedBox(width: double.infinity, height: 10),
-                NearbyDoctors(),
-              ],
-            ),
-          ),
-        ));
+      ),
+    );
   }
 }

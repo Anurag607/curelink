@@ -6,26 +6,13 @@ import 'package:curelink/utils/database.dart';
 class ThemedScreen extends StatelessWidget {
   final Widget topBar;
   final Widget child;
-  ThemedScreen({required this.topBar, required this.child, super.key});
-
-  static final GlobalKey<ScaffoldState> _scaffoldKey =
-      GlobalKey<ScaffoldState>();
-  static final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
-      GlobalKey<LiquidPullToRefreshState>();
+  const ThemedScreen({required this.topBar, required this.child, super.key});
 
   static final CureLinkDatabase db = CureLinkDatabase();
-
-  final List<dynamic> _gradientList = [
-    [HexColor("#AD1DEB"), HexColor("#6E72FC")],
-    [HexColor("#5D3FD3"), HexColor("#1FD1F9")],
-    [HexColor("#B621FE"), HexColor("#1FD1F9")],
-    [HexColor("#E975A8"), HexColor("#726CF8")],
-  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       backgroundColor: HexColor("#5D3FD3"),
       body: Stack(
         fit: StackFit.expand,
@@ -33,9 +20,13 @@ class ThemedScreen extends StatelessWidget {
           ShaderMask(
             shaderCallback: (rect) {
               return LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [HexColor("#5D3FD3"), HexColor("#1FD1F9")],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  HexColor("#5D3FD3"),
+                  HexColor("#1FD1F9"),
+                  HexColor("#666fdb")
+                ],
                 tileMode: TileMode.mirror,
               ).createShader(
                 Rect.fromLTRB(0, 0, rect.width, rect.height),
@@ -48,7 +39,7 @@ class ThemedScreen extends StatelessWidget {
                 color: Colors.transparent),
           ),
           LiquidPullToRefresh(
-            key: _refreshIndicatorKey,
+            // key: _refreshIndicatorKey,
             springAnimationDurationInMilliseconds: 300,
             height: 150,
             color: Colors.transparent,
@@ -57,7 +48,7 @@ class ThemedScreen extends StatelessWidget {
             onRefresh: () async {
               db.getCart();
               await Future.delayed(const Duration(seconds: 2));
-              _refreshIndicatorKey.currentState?.show();
+              // _refreshIndicatorKey.currentState?.show();
             },
             showChildOpacityTransition: true,
             child: SizedBox(

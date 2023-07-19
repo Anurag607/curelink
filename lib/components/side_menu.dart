@@ -12,6 +12,7 @@ class SideMenuCard extends StatelessWidget {
   final Menu menu;
   final VoidCallback dispatch;
   final VoidCallback press;
+  final VoidCallback closeSidebar;
   final ValueChanged<Artboard> riveOnInit;
   final bool? isExpanded;
 
@@ -20,6 +21,7 @@ class SideMenuCard extends StatelessWidget {
     required this.menu,
     required this.dispatch,
     required this.press,
+    required this.closeSidebar,
     required this.riveOnInit,
     this.isExpanded,
   });
@@ -55,6 +57,7 @@ class SideMenuCard extends StatelessWidget {
                       .dispatch(UpdateSelectedTabAction(menu, true));
                   dispatch();
                   press();
+                  closeSidebar();
                 },
                 leading: SizedBox(
                   height: 36,
@@ -102,24 +105,17 @@ class _SideMenuState extends State<SideMenu> {
   late Menu menu;
   late VoidCallback press;
   late VoidCallback dispatch;
+  late VoidCallback closeSidebar;
   late ValueChanged<Artboard> riveOnInit;
   late Menu selectedMenu;
-
-  bool _isExpanded = false;
-
-  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     menu = widget.menu;
     press = widget.press;
     dispatch = widget.dispatch;
+    closeSidebar = widget.closeSidebar;
     riveOnInit = widget.riveOnInit;
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {}
-    });
 
     super.initState();
   }
@@ -132,85 +128,14 @@ class _SideMenuState extends State<SideMenu> {
           padding: EdgeInsets.only(left: 24, bottom: 10, top: 10),
           child: Divider(color: Colors.white24, height: 1),
         ),
-        (menu.title == 'Music')
-            ? ExpansionPanelList(
-                elevation: 0,
-                dividerColor: Colors.transparent,
-                expandIconColor: Colors.white,
-                expandedHeaderPadding: const EdgeInsets.only(bottom: 10),
-                expansionCallback: (int index, bool isExpanded) {
-                  setState(() {
-                    _isExpanded = !isExpanded;
-                  });
-                },
-                children: List<int>.filled(1, 1).map<ExpansionPanel>(
-                  (_) {
-                    return ExpansionPanel(
-                      isExpanded: _isExpanded,
-                      backgroundColor: Colors.transparent,
-                      headerBuilder: (BuildContext context, bool isExpanded) {
-                        return SideMenuCard(
-                          menu: menu,
-                          press: press,
-                          dispatch: dispatch,
-                          riveOnInit: riveOnInit,
-                          isExpanded: _isExpanded,
-                        );
-                      },
-                      body: SingleChildScrollView(
-                        clipBehavior: Clip.antiAlias,
-                        scrollDirection: Axis.vertical,
-                        physics: const BouncingScrollPhysics(),
-                        child: Container(
-                            height: 130, width: 250, color: Colors.transparent),
-                      ),
-                    );
-                  },
-                ).toList(),
-              )
-            : SideMenuCard(
-                menu: menu,
-                press: press,
-                dispatch: dispatch,
-                riveOnInit: riveOnInit,
-              ),
+        SideMenuCard(
+          menu: menu,
+          press: press,
+          closeSidebar: closeSidebar,
+          dispatch: dispatch,
+          riveOnInit: riveOnInit,
+        ),
       ],
-    );
-  }
-
-  Widget fallbackWidget(
-      String message, String action, VoidCallback actionCallback) {
-    return Container(
-      width: 275,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.red[400],
-      ),
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            message,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.comfortaa(
-              textStyle: TextStyle(
-                  color: HexColor("#fafafa").withOpacity(1),
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w400),
-            ),
-          ),
-          const SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () {
-              actionCallback();
-            },
-            child: Text(action),
-          ),
-        ],
-      ),
     );
   }
 }

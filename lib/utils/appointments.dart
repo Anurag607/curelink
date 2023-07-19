@@ -1,18 +1,32 @@
 import 'dart:collection';
 import 'package:table_calendar/table_calendar.dart';
 
-/// Appointment class.
-class Appointment {
-  final String title;
-
-  const Appointment(this.title);
-
-  @override
-  String toString() => title;
-}
+List appointments = [
+  {
+    "name": "Dr. Brijesh Patel",
+    "desc": "Cardiologist",
+    "appointmentDate": "Today",
+    "appointmentTime": "14:00 - 15:30 PM",
+    "image": "assets/avaters/doctor_1.jpg"
+  },
+  {
+    "name": "Dr. Anthony Leeway",
+    "desc": "Dental Specialist",
+    "appointmentDate": "Today",
+    "appointmentTime": "14:00 - 15:30 PM",
+    "image": "assets/avaters/doctor_2.jpg"
+  },
+  {
+    "name": "Dr. Adison Ashley",
+    "desc": "Dental Specialist",
+    "appointmentDate": "Today",
+    "appointmentTime": "14:00 - 15:30 PM",
+    "image": "assets/avaters/doctor_3.jpg"
+  },
+];
 
 /// Appointments (Using a [LinkedHashMap] is highly recommended if you decide to use a map).
-final kAppointments = LinkedHashMap<DateTime, List<Appointment>>(
+final kAppointments = LinkedHashMap<DateTime, List<dynamic>>(
   equals: isSameDay,
   hashCode: getHashCode,
 )..addAll(_kAppointmentSource);
@@ -20,13 +34,10 @@ final kAppointments = LinkedHashMap<DateTime, List<Appointment>>(
 final _kAppointmentSource = LinkedHashMap.fromIterable(
     List.generate(50, (index) => index),
     key: (item) => DateTime.utc(kFirstDay.year, kFirstDay.month, item * 5),
-    value: (item) => List.generate(item % 4 + 1,
-        (index) => Appointment('Appointment $item | ${index + 1}')))
+    value: (item) => List.generate(
+        item % 4 + 1, (index) => appointments[index % appointments.length]))
   ..addAll({
-    kToday: [
-      const Appointment('Today\'s Appointment 1'),
-      const Appointment('Today\'s Appointment 2'),
-    ],
+    kToday: appointments,
   });
 
 int getHashCode(DateTime key) {

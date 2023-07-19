@@ -3,10 +3,11 @@
 import 'package:curelink/pages/chat_page.dart';
 import 'package:curelink/pages/login_page.dart';
 import 'package:curelink/pages/main_page.dart';
+import 'package:curelink/pages/schedule_page.dart';
 import 'package:curelink/pages/signup_page.dart';
 import 'package:curelink/pages/store_page.dart';
 import 'package:curelink/redux/states/sidebar_state.dart';
-import 'package:curelink/widgets/hidden_drawer.dart';
+import 'package:curelink/redux/states/user_details_state.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -36,32 +37,41 @@ class MyApp extends StatelessWidget {
   final Store<SidebarMenuState> _sidebarStore = Store<SidebarMenuState>(
     sidebarMenuReducer,
     initialState:
-        SidebarMenuState(selectedTab: sidebarMenus.first, isClosed: false),
+        SidebarMenuState(selectedTab: sidebarMenus[1], isClosed: false),
+  );
+
+  final Store<UserDetailsState> _userDetailsStore = Store<UserDetailsState>(
+    userDetailsReducer,
+    initialState: UserDetailsState(
+        auth_uid: null, displayName: null, email: null, phoneNumber: null),
   );
 
   @override
   Widget build(BuildContext context) {
     return StoreProvider(
-      store: _bottomnavbarStore,
+      store: _userDetailsStore,
       child: StoreProvider(
-        store: _sidebarStore,
-        child: MaterialApp(
-          title: 'CureLink',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            colorSchemeSeed: const Color(0xff5a73d8),
-            textTheme: GoogleFonts.comfortaaTextTheme(
-              Theme.of(context).textTheme,
+        store: _bottomnavbarStore,
+        child: StoreProvider(
+          store: _sidebarStore,
+          child: MaterialApp(
+            title: 'CureLink',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              colorSchemeSeed: const Color(0xff5a73d8),
+              textTheme: GoogleFonts.comfortaaTextTheme(
+                Theme.of(context).textTheme,
+              ),
+              scaffoldBackgroundColor: HexColor("#f6f8fe"),
+              useMaterial3: true,
             ),
-            scaffoldBackgroundColor: HexColor("#f6f8fe"),
-            useMaterial3: true,
+            initialRoute: '/',
+            routes: {
+              '/': (context) => const MainPage(),
+              '/login': (context) => const LoginPage(),
+              '/signup': (context) => const SignupPage(),
+            },
           ),
-          initialRoute: '/',
-          routes: {
-            '/': (context) => const MainPage(),
-            '/login': (context) => const LoginPage(),
-            '/signup': (context) => const SignupPage(),
-          },
         ),
       ),
     );

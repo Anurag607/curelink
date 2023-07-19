@@ -1,17 +1,21 @@
 // ignore_for_file: dead_code, use_build_context_synchronously, unused_element
 
 import 'package:curelink/Firebase/fire_auth.dart';
+import 'package:curelink/redux/states/user_details_state.dart';
+import 'package:curelink/utils/database.dart';
 import 'package:curelink/widgets/past_appointment_menu.dart';
 import 'package:curelink/widgets/past_orders_menu.dart';
 import 'package:curelink/widgets/settings_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ionicons/Ionicons.dart';
+import 'package:curelink/utils/scripts.dart';
 
 class ProfilePage extends StatefulWidget {
-  final User? user;
-  const ProfilePage({super.key, required this.user});
+  const ProfilePage({super.key});
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
@@ -75,206 +79,209 @@ class _ProfilePageState extends State<ProfilePage> {
   bool isSendingVerification = false;
   bool isSigningOut = false;
 
-  late User? currentUser;
+  User? currentUser;
+  CureLinkDatabase db = CureLinkDatabase();
+
+  Future<FirebaseApp> _initializeFirebase() async {
+    FirebaseApp firebaseApp = await Firebase.initializeApp();
+
+    currentUser = FirebaseAuth.instance.currentUser;
+
+    return firebaseApp;
+  }
 
   @override
   void initState() {
     data = [appointments, orders, settings];
-    currentUser = widget.user;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (currentUser == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pushReplacementNamed('/login');
-      });
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: HexColor("#f6f8fe"),
-      ),
-      child: Column(
-        children: [
-          // User Pic, Name, Email
-          Container(
-            width: double.infinity,
-            height: 300,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: const Alignment(-1, -1),
-                  end: const Alignment(1, 1),
-                  colors: _gradientList[0]),
-              borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(200),
-                  bottomRight: Radius.circular(200)),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(height: 50),
-                CircleAvatar(
-                    backgroundColor: HexColor("#f6f8fe"),
-                    radius: 70,
-                    child: Image.asset("assets/avaters/Avatar Default.jpg")),
-                const SizedBox(height: 20),
-                Text('${currentUser?.displayName}',
-                    style: TextStyle(
-                        color: HexColor('#f6f8fe'),
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold)),
-                Text('${currentUser?.email}',
-                    style: TextStyle(
-                        color: HexColor('#f6f8fe'),
-                        fontSize: 14,
-                        fontWeight: FontWeight.normal)),
-              ],
-            ),
-          ),
-          // Profile Section
-          SingleChildScrollView(
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: HexColor("#f6f8fe"),
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50)),
-              ),
-              child: Column(
-                children: [
-                  const SizedBox(height: 16.0),
-                  // Email Verification status
-                  currentUser!.emailVerified
-                      ? Text(
-                          'Email verified',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(color: Colors.green),
-                        )
-                      : Text(
-                          'Email not verified',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(color: Colors.red),
-                        ),
-                  const SizedBox(height: 16.0),
-                  isSendingVerification
-                      ? const CircularProgressIndicator()
-                      : Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () async {
-                                setState(() {
-                                  isSendingVerification = true;
-                                });
-                                await currentUser?.sendEmailVerification();
-                                setState(() {
-                                  isSendingVerification = false;
-                                });
-                              },
-                              child: const Text('Verify email'),
-                            ),
-                            const SizedBox(width: 8.0),
-                            IconButton(
-                              icon: const Icon(Icons.refresh),
-                              onPressed: () async {
-                                User? user =
-                                    await FireAuth.refreshUser(currentUser!);
-
-                                if (user != null) {
-                                  setState(
-                                    () {
-                                      currentUser = user;
-                                    },
-                                  );
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                  const SizedBox(height: 20),
-                  // Profile Options
-                  ListView.builder(
-                    padding: const EdgeInsets.all(0),
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    physics: const ScrollPhysics(),
-                    itemCount: profileOptions.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Column(
-                        children: [
-                          Material(
-                              elevation: 2,
-                              shadowColor: HexColor("#fefefe"),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                    color: HexColor("#f6f8fe"),
-                                  ),
-                                  child: ListTile(
-                                      onTap: () => profileOptions[index]
-                                          ["onTap"](context, data[index]),
-                                      leading: profileOptions[index]["icon"],
-                                      title: Text(
-                                          profileOptions[index]["title"],
-                                          style: const TextStyle(fontSize: 20)),
-                                      trailing: const Icon(
-                                          Ionicons.chevron_forward)))),
-                          const SizedBox(height: 10),
-                        ],
-                      );
-                    },
+    return FutureBuilder(
+      future: _initializeFirebase(),
+      builder: ((context, snapshot) {
+        return StoreConnector<UserDetailsState, dynamic>(
+            converter: (store) => store.state,
+            builder: (BuildContext context, dynamic userDetails) {
+              if (CustomScripts.validateUserObjects(currentUser, userDetails) &&
+                  db.getUserDetails() == null) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  Navigator.of(context).pushReplacementNamed('/login');
+                });
+              }
+              return Scaffold(
+                body: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: HexColor("#f6f8fe"),
                   ),
-                  // Logout Button
-                  isSigningOut
-                      ? const CircularProgressIndicator()
-                      : TextButton(
-                          onPressed: () async {
-                            setState(() {
-                              isSigningOut = true;
-                            });
-                            FireAuth.signOut();
-                            setState(() {
-                              isSigningOut = false;
-                            });
-                            Navigator.pushNamed(context, '/login');
-                          },
-                          child: Material(
-                            elevation: 2,
-                            shadowColor: HexColor("#e8e8e8"),
-                            child: Container(
+                  child: Column(
+                    children: [
+                      // User Pic, Name, Email
+                      Container(
+                        width: double.infinity,
+                        height: 300,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: const Alignment(-1, -1),
+                              end: const Alignment(1, 1),
+                              colors: _gradientList[0]),
+                          borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(200),
+                              bottomRight: Radius.circular(200)),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 50),
+                            Container(
+                              width: 140,
+                              height: 140,
                               decoration: BoxDecoration(
-                                color: Colors.red[100],
-                              ),
-                              child: ListTile(
-                                onTap: () => {},
-                                leading: const Icon(Ionicons.log_out,
-                                    color: Colors.red, size: 30),
-                                title: const Text(
-                                  "Logout",
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+                                borderRadius: BorderRadius.circular(100),
+                                border: Border.all(
+                                    color: HexColor('#f6f8fe'), width: 0),
+                                image: DecorationImage(
+                                  image:
+                                      Image.asset("assets/avaters/Avatar 2.jpg")
+                                          .image,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
+                            const SizedBox(height: 20),
+                            Text(
+                                (CustomScripts.validateUserDisplayName(
+                                            currentUser, userDetails) ||
+                                        (db.getUserDetails() != null &&
+                                            db.getUserDetails()![
+                                                    "displayName"] !=
+                                                null))
+                                    ? currentUser?.displayName ??
+                                        userDetails?.displayName ??
+                                        db.getUserDetails()!["displayName"]
+                                    : "NA",
+                                style: TextStyle(
+                                    color: HexColor('#f6f8fe'),
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold)),
+                            const SizedBox(height: 10),
+                            Text(
+                                (CustomScripts.validateUserEmail(
+                                            currentUser, userDetails) ||
+                                        (db.getUserDetails() != null &&
+                                            db.getUserDetails()!["email"] !=
+                                                null))
+                                    ? currentUser?.email ??
+                                        userDetails?.email ??
+                                        db.getUserDetails()!["email"]
+                                    : "NA",
+                                style: TextStyle(
+                                    color: HexColor('#f6f8fe'),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal)),
+                          ],
+                        ),
+                      ),
+                      // Profile Section
+                      SingleChildScrollView(
+                        child: Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: HexColor("#f6f8fe"),
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(50),
+                                topRight: Radius.circular(50)),
+                          ),
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 16.0),
+                              // Profile Options
+                              ListView.builder(
+                                padding: const EdgeInsets.all(0),
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                physics: const ScrollPhysics(),
+                                itemCount: profileOptions.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Column(
+                                    children: [
+                                      Material(
+                                          elevation: 2,
+                                          shadowColor: HexColor("#fefefe"),
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                color: HexColor("#f6f8fe"),
+                                              ),
+                                              child: ListTile(
+                                                  onTap: () =>
+                                                      profileOptions[index]
+                                                              ["onTap"](
+                                                          context, data[index]),
+                                                  leading: profileOptions[index]
+                                                      ["icon"],
+                                                  title: Text(
+                                                      profileOptions[index]
+                                                          ["title"],
+                                                      style: const TextStyle(
+                                                          fontSize: 20)),
+                                                  trailing: const Icon(
+                                                      Ionicons.chevron_forward)))),
+                                      const SizedBox(height: 10),
+                                    ],
+                                  );
+                                },
+                              ),
+                              // Logout Button
+                              isSigningOut
+                                  ? const CircularProgressIndicator()
+                                  : TextButton(
+                                      onPressed: () async {
+                                        setState(() {
+                                          isSigningOut = true;
+                                        });
+                                        FireAuth.signOut();
+                                        setState(() {
+                                          isSigningOut = false;
+                                        });
+                                        Navigator.pushNamed(context, '/login');
+                                      },
+                                      child: Material(
+                                        elevation: 2,
+                                        shadowColor: HexColor("#e8e8e8"),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.red[100],
+                                          ),
+                                          child: ListTile(
+                                            onTap: () => {},
+                                            leading: const Icon(
+                                                Ionicons.log_out,
+                                                color: Colors.red,
+                                                size: 30),
+                                            title: const Text(
+                                              "Logout",
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                            ],
                           ),
                         ),
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            });
+      }),
     );
   }
 }

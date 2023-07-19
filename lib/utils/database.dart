@@ -1,15 +1,24 @@
 import 'dart:developer';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 
 class CureLinkDatabase {
-  Map<dynamic, dynamic> userDetails = {
-    'name': '',
-    'email': '',
-    'password': '',
-  };
+  final dateFormat = DateFormat('yyyy-MM-dd hh:mm');
+  final timeFormat = DateFormat.jm();
+  final now = DateTime.now();
 
-// type: List<Map<string, dynamic>>
+  DateTime _formatConvertor(DateTime dateTime, String time) {
+    return DateTime.parse(DateFormat('yyyy-MM-dd HH:mm').format(
+            DateTime.parse("${DateFormat("yyyy-MM-dd").format(dateTime)} $time")
+                .toLocal()))
+        .toLocal();
+  }
+
+  // type: Map<DateTime, List<Map<String, dynamic>>>
+  Map<dynamic, dynamic> appointments = {};
+
+  // type: List<Map<string, dynamic>>
   late List<dynamic> cart = [];
 
   final _curelinkData = Hive.box('curelinkData');
@@ -20,17 +29,21 @@ class CureLinkDatabase {
     _curelinkData.clear();
   }
 
+// ################################### USER DETAILS ###################################
+
   // Function to save the user details...
-  void saveUserDetails() {
+  void saveUserDetails(userDetails) {
     log('Saving user details...');
     _curelinkData.put('userDetails', userDetails);
   }
 
   // Function to get the user details...
-  void getUserDetails() {
+  dynamic getUserDetails() {
     log('Getting user details...');
-    userDetails = _curelinkData.get('userDetails') ?? userDetails;
+    return _curelinkData.get('userDetails');
   }
+
+// ################################### CART ###################################
 
   // Function to save the cart...
   void saveCart() {
@@ -96,5 +109,55 @@ class CureLinkDatabase {
     cart.clear();
     saveCart();
     getCart();
+  }
+
+// ################################### APPOINTMENTS ###################################
+// Function to update the collection of appointment list...
+  void saveAppointments() {
+    log("Saving Appointments...");
+    _curelinkData.put('appointments', appointments);
+  }
+
+  // Function to get the collection of appointment list...
+  void getAppointments() {
+    log("Getting Appointments...");
+    appointments = _curelinkData.get('appointments') ?? appointments;
+    log(appointments.toString());
+  }
+
+  // Function to update the appointment status...
+  void updateAppointmentStatus(String date, int appointmentIndex, bool isDone) {
+    appointments[date][appointmentIndex]['isDone'] = isDone;
+    saveAppointments();
+    getAppointments();
+  }
+
+  // Function to delete a appointment item from the appointment list...
+  void deleteAppointment(String date, int appointmentIndex) {
+    log("Deleting appointment...");
+    getAppointments();
+
+    if (appointments[date].length > appointmentIndex) {
+      log("to delete: $appointmentIndex, $date, ${appointments[date].length}");
+      log("to delete: ${appointments[date][appointmentIndex].toString()}, $date");
+      appointments[date].removeAt(appointmentIndex);
+    }
+    saveAppointments();
+    getAppointments();
+  }
+
+  // Function to add a appointment item to the appointment list...
+  void addAppointment(String date, Map<dynamic, dynamic> appointmentItem) {
+    appointments[date] = [...appointments[date], appointmentItem];
+    saveAppointments();
+    getAppointments();
+  }
+
+  // Function to update a certain appointment item in the appointment list...
+  void updateAppointment(String date, int appointmentIndex,
+      Map<dynamic, dynamic> appointmentItem) {
+    appointments[date][appointmentIndex] = appointmentItem;
+    saveAppointments();
+    getAppointments();
   }
 }

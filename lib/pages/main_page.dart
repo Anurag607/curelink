@@ -1,5 +1,6 @@
-import 'dart:math';
+import 'dart:math' as math;
 
+import 'package:curelink/Firebase/fire_auth.dart';
 import 'package:curelink/Templates/standard_screen.dart';
 import 'package:curelink/components/top_bar.dart';
 import 'package:curelink/redux/states/navigation_state.dart';
@@ -30,19 +31,11 @@ class _MainPageState extends State<MainPage>
   Future<FirebaseApp> _initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
 
-    User? user = FirebaseAuth.instance.currentUser;
-
-    if (user == null) {
-      // Navigator.pushNamed(context, '/login');
-    } else {
-      currentUser = user;
-    }
+    currentUser = FirebaseAuth.instance.currentUser;
+    FireAuth.signOut();
 
     return firebaseApp;
   }
-
-  static final GlobalKey<ScaffoldState> _scaffoldKey =
-      GlobalKey<ScaffoldState>();
 
   bool isSideBarOpen = false;
   Menu selectedSideMenu = sidebarMenus.first;
@@ -77,9 +70,9 @@ class _MainPageState extends State<MainPage>
   @override
   void initState() {
     _widgetOptions = [
-      ThemedScreen(
-        topBar: TopBar(user: currentUser),
-        child: const HomePage(),
+      const ThemedScreen(
+        topBar: TopBar(),
+        child: HomePage(),
       ),
       ThemedScreen(
         topBar: Text(
@@ -116,134 +109,122 @@ class _MainPageState extends State<MainPage>
     return FutureBuilder(
       future: _initializeFirebase(),
       builder: ((context, snapshot) {
-        if (currentUser != null) {
-          return const Center(child: CircularProgressIndicator());
-        } else {
-          return StoreConnector<NavigationState, int>(
-            converter: (store) => store.state.tabIndex,
-            builder: (context, int stateNavigationIndex) => Scaffold(
-              key: _scaffoldKey,
-              backgroundColor: HexColor("#666fdb"),
-              body: SwipeTo(
-                iconColor: Colors.transparent,
-                onRightSwipe: () {
-                  isMenuOpenInput.value = true;
-                  _animationController.forward();
-                  setState(
-                    () {
-                      isSideBarOpen = true;
-                    },
-                  );
-                },
-                onLeftSwipe: () {
-                  isMenuOpenInput.value = false;
-                  _animationController.reverse();
-                  setState(
-                    () {
-                      isSideBarOpen = false;
-                    },
-                  );
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height,
-                  color: Colors.transparent,
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                        color: Colors.transparent,
-                        child: Transform(
-                          alignment: Alignment.center,
-                          transform: Matrix4.identity()
-                            ..setEntry(3, 2, 0.001)
-                            ..rotateY(1 * animation.value -
-                                30 * (animation.value) * pi / 180),
-                          child: Transform.translate(
-                            offset: Offset(animation.value * 265, 0),
-                            child: Transform.scale(
-                              scale: scalAnimation.value,
-                              child: ClipRRect(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(30),
-                                ),
-                                child: SingleChildScrollView(
-                                  clipBehavior: Clip.antiAlias,
-                                  scrollDirection: Axis.vertical,
-                                  physics: const BouncingScrollPhysics(),
-                                  child: Container(
-                                    width: double.infinity,
-                                    height:
-                                        MediaQuery.of(context).size.height - 50,
-                                    color: Colors.transparent,
-                                    child: _widgetOptions[stateNavigationIndex],
-                                  ),
-                                ),
+        return StoreConnector<NavigationState, int>(
+          converter: (store) => store.state.tabIndex,
+          builder: (context, int stateNavigationIndex) => Scaffold(
+            backgroundColor: HexColor("#666fdb"),
+            body: SwipeTo(
+              iconColor: Colors.transparent,
+              onRightSwipe: () {
+                isMenuOpenInput.value = true;
+                _animationController.forward();
+                setState(
+                  () {
+                    isSideBarOpen = true;
+                  },
+                );
+              },
+              onLeftSwipe: () {
+                isMenuOpenInput.value = false;
+                _animationController.reverse();
+                setState(
+                  () {
+                    isSideBarOpen = false;
+                  },
+                );
+              },
+              child: Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height - 75,
+                color: Colors.transparent,
+                child: Stack(
+                  children: [
+                    Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.identity()
+                        ..setEntry(3, 2, 0.001)
+                        ..rotateY(1 * animation.value -
+                            30 * (animation.value) * math.pi / 180),
+                      child: Transform.translate(
+                        offset: Offset(animation.value * 265, 0),
+                        child: Transform.scale(
+                          scale: scalAnimation.value,
+                          child: ClipRRect(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(30)),
+                            child: SingleChildScrollView(
+                              clipBehavior: Clip.antiAlias,
+                              scrollDirection: Axis.vertical,
+                              physics: const BouncingScrollPhysics(),
+                              child: Container(
+                                width: double.infinity,
+                                height: MediaQuery.of(context).size.height - 50,
+                                color: Colors.transparent,
+                                child: _widgetOptions[stateNavigationIndex],
                               ),
                             ),
                           ),
                         ),
                       ),
-                      AnimatedPositioned(
-                        width: 288,
-                        height: MediaQuery.of(context).size.height,
-                        duration: const Duration(milliseconds: 200),
-                        curve: Curves.fastOutSlowIn,
-                        left: isSideBarOpen ? 0 : -288,
-                        top: 0,
-                        child: SideBar(closeSidebar: () {
-                          _animationController.reverse();
+                    ),
+                    AnimatedPositioned(
+                      width: 288,
+                      height: MediaQuery.of(context).size.height,
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.fastOutSlowIn,
+                      left: isSideBarOpen ? 0 : -288,
+                      top: 0,
+                      child: SideBar(closeSidebar: () {
+                        _animationController.reverse();
+                        setState(
+                          () {
+                            isSideBarOpen = false;
+                          },
+                        );
+                      }),
+                    ),
+                    AnimatedPositioned(
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.fastOutSlowIn,
+                      left: isSideBarOpen ? 220 : 0,
+                      top: 16,
+                      child: MenuBtn(
+                        press: () {
+                          isMenuOpenInput.value = !isMenuOpenInput.value;
+
+                          if (_animationController.value == 0) {
+                            _animationController.forward();
+                          } else {
+                            _animationController.reverse();
+                          }
+
                           setState(
                             () {
-                              isSideBarOpen = false;
+                              isSideBarOpen = !isSideBarOpen;
                             },
                           );
-                        }),
+                        },
+                        hide: isSideBarOpen && false,
+                        riveOnInit: (artboard) {
+                          final controller =
+                              StateMachineController.fromArtboard(
+                                  artboard, "State Machine");
+
+                          artboard.addController(controller!);
+
+                          isMenuOpenInput =
+                              controller.findInput<bool>("isOpen") as SMIBool;
+                          isMenuOpenInput.value = true;
+                        },
                       ),
-                      AnimatedPositioned(
-                        duration: const Duration(milliseconds: 200),
-                        curve: Curves.fastOutSlowIn,
-                        left: isSideBarOpen ? 220 : 0,
-                        top: 16,
-                        child: MenuBtn(
-                          press: () {
-                            isMenuOpenInput.value = !isMenuOpenInput.value;
-
-                            if (_animationController.value == 0) {
-                              _animationController.forward();
-                            } else {
-                              _animationController.reverse();
-                            }
-
-                            setState(
-                              () {
-                                isSideBarOpen = !isSideBarOpen;
-                              },
-                            );
-                          },
-                          hide: isSideBarOpen && false,
-                          riveOnInit: (artboard) {
-                            final controller =
-                                StateMachineController.fromArtboard(
-                                    artboard, "State Machine");
-
-                            artboard.addController(controller!);
-
-                            isMenuOpenInput =
-                                controller.findInput<bool>("isOpen") as SMIBool;
-                            isMenuOpenInput.value = true;
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              bottomNavigationBar: CurvedBottomNavBar(animation: animation),
             ),
-          );
-        }
+            bottomNavigationBar: CurvedBottomNavBar(animation: animation),
+          ),
+        );
       }),
     );
   }

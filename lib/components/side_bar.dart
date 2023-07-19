@@ -1,5 +1,6 @@
+import 'package:curelink/pages/profile_page.dart';
+import 'package:curelink/pages/schedule_page.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:curelink/utils/database.dart';
 
@@ -31,9 +32,9 @@ class _SideBarState extends State<SideBar> {
     _closeSidebar = widget.closeSidebar;
 
     if (_curelinkData.get("userDetails") == null) {
-      db.saveUserDetails();
+      // db.saveUserDetails();
     } else {
-      db.getUserDetails();
+      // db.getUserDetails();
     }
 
     super.initState();
@@ -65,9 +66,7 @@ class _SideBarState extends State<SideBar> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 24),
-                  InfoCard(
-                    name: db.userDetails["name"],
-                  ),
+                  const InfoCard(),
                   Padding(
                     padding:
                         const EdgeInsets.only(left: 24, top: 32, bottom: 16),
@@ -85,10 +84,30 @@ class _SideBarState extends State<SideBar> {
                         menu: menu,
                         dispatch: () {
                           int selectedIndex = 0;
-                          if (menu.title == 'Music') {
-                            selectedIndex = 2;
-                          } else {
+                          if (menu.title == 'Profile') {
+                            Future.delayed(const Duration(milliseconds: 210))
+                                .then(
+                              (_) => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ProfilePage(),
+                                ),
+                              ),
+                            );
+                          } else if (menu.title == 'Home') {
                             selectedIndex = 0;
+                          } else if (menu.title == 'Conversations') {
+                            selectedIndex = 2;
+                          } else if (menu.title == 'Schedule') {
+                            Future.delayed(const Duration(milliseconds: 210))
+                                .then(
+                              (_) => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SchedulePage(),
+                                ),
+                              ),
+                            );
                           }
                           StoreProvider.of<NavigationState>(context).dispatch(
                             UpdateNavigationIndexAction(selectedIndex),
@@ -109,7 +128,7 @@ class _SideBarState extends State<SideBar> {
                     padding:
                         const EdgeInsets.only(left: 24, top: 40, bottom: 16),
                     child: Text(
-                      "History".toUpperCase(),
+                      "Utility".toUpperCase(),
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium!
@@ -125,6 +144,17 @@ class _SideBarState extends State<SideBar> {
                             menu: menu,
                             dispatch: () {
                               if (menu.title == "Previous Appointments") {
+                                Future.delayed(
+                                        const Duration(milliseconds: 210))
+                                    .then(
+                                  (_) => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Container(),
+                                    ),
+                                  ),
+                                );
+                              } else if (menu.title == "Settings & Privacy") {
                                 Future.delayed(
                                         const Duration(milliseconds: 210))
                                     .then(

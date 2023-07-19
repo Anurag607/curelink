@@ -9,6 +9,13 @@ class Menu {
 
 List<Menu> sidebarMenus = [
   Menu(
+    title: "Profile",
+    rive: RiveModel(
+        src: "assets/RiveAssets/icons.riv",
+        artboard: "USER",
+        stateMachineName: "USER_Interactivity"),
+  ),
+  Menu(
     title: "Home",
     rive: RiveModel(
         src: "assets/RiveAssets/icons.riv",
@@ -16,11 +23,18 @@ List<Menu> sidebarMenus = [
         stateMachineName: "HOME_interactivity"),
   ),
   Menu(
-    title: "Music",
+    title: "Schedule",
     rive: RiveModel(
         src: "assets/RiveAssets/icons.riv",
-        artboard: "PODCASTS",
-        stateMachineName: "PODCAST_Interactivity"),
+        artboard: "CALENDAR",
+        stateMachineName: "CALENDAR_Interactivity"),
+  ),
+  Menu(
+    title: "Conversations",
+    rive: RiveModel(
+        src: "assets/RiveAssets/icons.riv",
+        artboard: "CHAT",
+        stateMachineName: "CHAT_Interactivity"),
   ),
 ];
 List<Menu> sidebarMenus2 = [
@@ -30,5 +44,12 @@ List<Menu> sidebarMenus2 = [
         src: "assets/RiveAssets/icons.riv",
         artboard: "TIMER",
         stateMachineName: "TIMER_Interactivity"),
+  ),
+  Menu(
+    title: "Settings & Privacy",
+    rive: RiveModel(
+        src: "assets/RiveAssets/icons.riv",
+        artboard: "SETTINGS",
+        stateMachineName: "SETTINGS_Interactivity"),
   ),
 ];

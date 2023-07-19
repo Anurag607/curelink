@@ -2,11 +2,11 @@
 
 import 'package:curelink/Animations/fade_animation.dart';
 import 'package:curelink/Firebase/fire_auth.dart';
+import 'package:curelink/utils/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -29,6 +29,8 @@ class _SignupPageState extends State<SignupPage> {
   final _focusPassword = FocusNode();
 
   bool isProcessing = false;
+
+  CureLinkDatabase db = CureLinkDatabase();
 
   Future<FirebaseApp> _initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
@@ -232,23 +234,29 @@ class _SignupPageState extends State<SignupPage> {
                                             setState(() {
                                               isProcessing = true;
                                             });
-                                            User? user = await FireAuth
-                                                .registerUsingEmailPassword(
+                                            FireAuth.registerUsingEmailPassword(
+                                              context: context,
                                               name: _nameTextController.text,
                                               email: _emailTextController.text,
                                               password:
                                                   _passwordTextController.text,
                                               phoneNumber:
-                                                  '+91${_phoneNumberTextController.text}',
-                                            );
+                                                  _phoneNumberTextController
+                                                      .text,
+                                            ).then((value) => {
+                                                  db.saveUserDetails({
+                                                    "displayName":
+                                                        value!.displayName,
+                                                    "email": value.email,
+                                                    "auth_uid": value.uid,
+                                                    "phoneNumber":
+                                                        value.phoneNumber,
+                                                  })
+                                                });
 
                                             setState(() {
                                               isProcessing = false;
                                             });
-
-                                            if (user != null) {
-                                              Navigator.pushNamed(context, '/');
-                                            }
                                           }
                                         },
                                         child: Container(
