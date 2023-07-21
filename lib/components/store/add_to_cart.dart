@@ -21,47 +21,44 @@ class AddToCart extends StatelessWidget {
       builder: (BuildContext context, dynamic currentProductDetails) =>
           Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: SizedBox(
-                height: 50,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18)),
-                    backgroundColor: HexColor('#5D3FD3'),
-                  ),
-                  onPressed: () {
-                    StoreProvider.of<CartState>(context).dispatch(
-                      AddtoCartAction(
-                        currentProductDetails.currentProduct,
-                        currentProductDetails.currentProductQty,
-                      ),
-                    );
-                  },
-                  child: Row(
-                    children: [
-                      Icon(
-                        Ionicons.cart,
-                        color: HexColor("#f6f8fe").withOpacity(1),
-                        size: 30,
-                      ),
-                      const SizedBox(width: 15),
-                      Text(
-                        "Add To Cart".toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                          color: HexColor("#f6f8fe").withOpacity(1),
-                        ),
-                      ),
-                    ],
-                  ),
+        child: SizedBox(
+          height: 50,
+          child: TextButton(
+            style: TextButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18)),
+              backgroundColor: HexColor('#5D3FD3'),
+            ),
+            onPressed: () {
+              StoreProvider.of<CartState>(context).dispatch(
+                AddtoCartAction(
+                  currentProductDetails.currentProduct,
+                  currentProductDetails.currentProductQty,
                 ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                children: [
+                  Icon(
+                    Ionicons.cart,
+                    color: HexColor("#f6f8fe").withOpacity(1),
+                    size: 30,
+                  ),
+                  const SizedBox(width: 15),
+                  Text(
+                    "Add To Cart".toUpperCase(),
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: HexColor("#f6f8fe").withOpacity(1),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

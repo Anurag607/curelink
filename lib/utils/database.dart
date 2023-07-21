@@ -53,8 +53,8 @@ class CureLinkDatabase {
 
   // Function to get the cart...
   void getCart() {
-    log('Getting cart...');
     cart = _curelinkData.get('cart') ?? cart;
+    log('got_cart: ${cart.length}');
   }
 
   // Function to check if the item is in the cart...

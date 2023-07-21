@@ -38,15 +38,12 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    super.initState();
     if (_curelinkData.get('cart') == null) {
       db.saveCart([]);
     } else {
       db.getCart();
     }
-    StoreProvider.of<CartState>(context).dispatch(
-      SetCartAction(db.cart),
-    );
-    super.initState();
   }
 
   @override
@@ -57,6 +54,9 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    StoreProvider.of<CartState>(context).dispatch(
+      SetCartAction(db.cart),
+    );
     return Container(
       color: HexColor("#f6f8fe"),
       child: Column(
@@ -144,6 +144,10 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                           child: ItemCard(
                             product: products[index],
                             press: () => {
+                              StoreProvider.of<CurrentProductState>(context)
+                                  .dispatch(
+                                UpdateCurrentProductAction(products[index], 1),
+                              ),
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

@@ -1,10 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
-
 class Product {
   final String image, title, description, type;
   final int price, id;
-  final Color color;
   int quantity;
   Product({
     required this.id,
@@ -13,7 +9,6 @@ class Product {
     required this.price,
     required this.description,
     required this.type,
-    required this.color,
     required this.quantity,
   });
 }
@@ -27,7 +22,6 @@ List<Product> products = [
     type: "ointments",
     description: dummyText,
     image: "assets/medicines/Fusiderm.png",
-    color: HexColor("#f6f8fe"),
     quantity: 10,
   ),
   Product(
@@ -37,7 +31,6 @@ List<Product> products = [
     type: "ointments",
     description: dummyText,
     image: "assets/medicines/Terrasil.png",
-    color: HexColor("#f6f8fe"),
     quantity: 10,
   ),
   Product(
@@ -47,7 +40,6 @@ List<Product> products = [
     type: "ointments",
     description: dummyText,
     image: "assets/medicines/CeraVe.png",
-    color: HexColor("#f6f8fe"),
     quantity: 10,
   ),
   Product(
@@ -57,7 +49,6 @@ List<Product> products = [
     type: "ointments",
     description: dummyText,
     image: "assets/medicines/Aquaphor.png",
-    color: HexColor("#f6f8fe"),
     quantity: 10,
   ),
 
@@ -69,7 +60,6 @@ List<Product> products = [
     type: "tablets",
     description: dummyText,
     image: "assets/medicines/Gofen 400.png",
-    color: HexColor("#f6f8fe"),
     quantity: 10,
   ),
   Product(
@@ -79,7 +69,6 @@ List<Product> products = [
     type: "tablets",
     description: dummyText,
     image: "assets/medicines/Aspirin-C.png",
-    color: HexColor("#f6f8fe"),
     quantity: 10,
   ),
   Product(
@@ -89,7 +78,6 @@ List<Product> products = [
     type: "tablets",
     description: dummyText,
     image: "assets/medicines/Doliprane.png",
-    color: HexColor("#f6f8fe"),
     quantity: 10,
   ),
   Product(
@@ -99,7 +87,6 @@ List<Product> products = [
     type: "tablets",
     description: dummyText,
     image: "assets/medicines/Paracetamol.png",
-    color: HexColor("#f6f8fe"),
     quantity: 10,
   ),
 
@@ -111,7 +98,6 @@ List<Product> products = [
     type: "syrups",
     description: dummyText,
     image: "assets/medicines/Allergex 100.png",
-    color: HexColor("#f6f8fe"),
     quantity: 10,
   ),
   Product(
@@ -121,7 +107,6 @@ List<Product> products = [
     type: "syrups",
     description: dummyText,
     image: "assets/medicines/Bisolvon.png",
-    color: HexColor("#f6f8fe"),
     quantity: 10,
   ),
   Product(
@@ -131,7 +116,6 @@ List<Product> products = [
     type: "syrups",
     description: dummyText,
     image: "assets/medicines/Meritus Cough Syrup.png",
-    color: HexColor("#f6f8fe"),
     quantity: 10,
   ),
   Product(
@@ -141,7 +125,6 @@ List<Product> products = [
     type: "syrups",
     description: dummyText,
     image: "assets/medicines/Chest-Eeze.png",
-    color: HexColor("#f6f8fe"),
     quantity: 10,
   ),
 ];

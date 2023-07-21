@@ -9,6 +9,7 @@ import 'package:curelink/pages/signup_page.dart';
 import 'package:curelink/redux/states/cart_state.dart';
 import 'package:curelink/redux/states/sidebar_state.dart';
 import 'package:curelink/redux/states/user_details_state.dart';
+import 'package:curelink/utils/productAdapter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -23,6 +24,7 @@ import 'models/menu.dart';
 
 void main() async {
   await Hive.initFlutter();
+  Hive.registerAdapter(ProductAdapter());
   await Hive.openBox('curelinkData');
   runApp(MyApp());
 }

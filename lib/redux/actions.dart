@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:curelink/models/product.dart';
-import 'package:curelink/redux/states/cart_state.dart';
 
 import '../../models/menu.dart';
 

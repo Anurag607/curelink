@@ -50,7 +50,6 @@ class _CounterState extends State<Counter> {
                       product.quantity - 1,
                     ),
                   );
-                  product.quantity--;
                 },
               );
               return;
@@ -75,7 +74,6 @@ class _CounterState extends State<Counter> {
                     product.quantity + 1,
                   ),
                 );
-                product.quantity++;
               },
             );
           },
@@ -203,7 +201,7 @@ class CartCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            "${product.price}",
+                            "${product.price * product.quantity}",
                             style: TextStyle(
                               color: HexColor("#37474f"),
                               fontSize: 14,

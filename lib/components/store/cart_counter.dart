@@ -24,7 +24,6 @@ class _CartCounterState extends State<CartCounter> {
                 if (currentProductDetails.currentProductQty > 1) {
                   setState(
                     () {
-                      currentProductDetails.currentProductQty--;
                       StoreProvider.of<CurrentProductState>(context).dispatch(
                         UpdateCurrentProductAction(
                           currentProductDetails.currentProduct,
@@ -50,7 +49,6 @@ class _CartCounterState extends State<CartCounter> {
               press: () {
                 setState(
                   () {
-                    currentProductDetails.currentProductQty++;
                     StoreProvider.of<CurrentProductState>(context).dispatch(
                       UpdateCurrentProductAction(
                         currentProductDetails.currentProduct,

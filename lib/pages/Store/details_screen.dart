@@ -5,17 +5,15 @@ import 'package:curelink/components/store/cart_counter.dart';
 import 'package:curelink/components/store/color_and_type.dart';
 import 'package:curelink/components/store/description.dart';
 import 'package:curelink/components/store/product_title_with_image.dart';
-import 'package:curelink/redux/actions.dart';
-import 'package:curelink/redux/states/cart_state.dart';
-import 'package:flutter/material.dart';
 import 'package:curelink/models/product.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:curelink/pages/Store/cart_page.dart';
+import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ionicons/Ionicons.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class DetailsScreen extends StatefulWidget {
-  final Product product;
+  final dynamic product;
   const DetailsScreen({super.key, required this.product});
 
   @override
@@ -28,9 +26,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
   @override
   void initState() {
     product = widget.product;
-    StoreProvider.of<CurrentProductState>(context).dispatch(
-      UpdateCurrentProductAction(product, 1),
-    );
     super.initState();
   }
 
@@ -102,14 +97,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 const SizedBox(height: 10),
                                 Description(product: product),
                                 const SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    const CartCounter(),
-                                    AddToCart(product: product),
-                                  ],
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      const CartCounter(),
+                                      AddToCart(product: product),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -162,7 +161,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               icon: Icon(Ionicons.cart,
                                   color: HexColor("#f6f8fe").withOpacity(1),
                                   size: 30),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const CartPage(),
+                                  ),
+                                );
+                              },
                             ),
                           ),
                           const SizedBox(width: 10),

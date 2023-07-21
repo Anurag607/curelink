@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:curelink/models/product.dart';
 import 'package:curelink/redux/states/cart_state.dart';
 import 'package:curelink/redux/states/sidebar_state.dart';
@@ -44,6 +46,7 @@ CartState updateCartReducer(CartState state, dynamic action) {
   if (action is AddtoCartAction) {
     Product temp = action.product;
     temp.quantity = action.productQty;
+    log("temp: $temp");
     db.saveCart([...state.cart, temp]);
     db.getCart();
     return CartState(cart: [...state.cart, temp]);
