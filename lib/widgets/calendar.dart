@@ -85,6 +85,8 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    _opacityControllerAddAppointments.dispose();
+    _opacityControllerAddPrompt.dispose();
     _focusedDay.dispose();
     _selectedAppointments.dispose();
     super.dispose();
@@ -314,7 +316,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
         padding: const EdgeInsets.all(16),
         margin: const EdgeInsets.only(top: 20),
         decoration: BoxDecoration(
-          color: HexColor("f6f8fe"),
+          color: HexColor("#f6f8fe"),
           borderRadius: const BorderRadius.all(Radius.circular(20)),
           boxShadow: const [
             BoxShadow(
@@ -332,7 +334,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
               Text(
                 "No Appointments scheduled for ${DateFormat.yMd().format(_focusedDay.value) == DateFormat.yMd().format(DateTime.now()) ? "Today" : "this day"}!",
                 textAlign: TextAlign.center,
-                style: GoogleFonts.quicksand(
+                style: GoogleFonts.comfortaa(
                   textStyle: TextStyle(
                       color: HexColor("#1a1a1c").withOpacity(0.75),
                       fontSize: 19,
@@ -369,10 +371,10 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                   Icons.schedule,
                   color: HexColor("#f6f8fe"),
                 ),
-                label: const Text(
+                label: Text(
                   "Schedule an Appointment",
                   style: TextStyle(
-                      color: Colors.white,
+                      color: HexColor("#f6f8fe"),
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
                 ),

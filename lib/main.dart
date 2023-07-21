@@ -1,11 +1,12 @@
 // ignore_for_file: unused_import
 
+import 'package:curelink/pages/Store/home_screen.dart';
 import 'package:curelink/pages/chat_page.dart';
 import 'package:curelink/pages/login_page.dart';
 import 'package:curelink/pages/main_page.dart';
 import 'package:curelink/pages/schedule_page.dart';
 import 'package:curelink/pages/signup_page.dart';
-import 'package:curelink/pages/store_page.dart';
+import 'package:curelink/redux/states/cart_state.dart';
 import 'package:curelink/redux/states/sidebar_state.dart';
 import 'package:curelink/redux/states/user_details_state.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +47,20 @@ class MyApp extends StatelessWidget {
         auth_uid: null, displayName: null, email: null, phoneNumber: null),
   );
 
+  final Store<CurrentProductState> _currentProductStore =
+      Store<CurrentProductState>(
+    updateCurrentProductReducer,
+    initialState: CurrentProductState(
+      currentProduct: null,
+      currentProductQty: 1,
+    ),
+  );
+
+  final Store<CartState> _cartStore = Store<CartState>(
+    updateCartReducer,
+    initialState: CartState(cart: []),
+  );
+
   @override
   Widget build(BuildContext context) {
     return StoreProvider(
@@ -54,23 +69,30 @@ class MyApp extends StatelessWidget {
         store: _bottomnavbarStore,
         child: StoreProvider(
           store: _sidebarStore,
-          child: MaterialApp(
-            title: 'CureLink',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              colorSchemeSeed: const Color(0xff5a73d8),
-              textTheme: GoogleFonts.comfortaaTextTheme(
-                Theme.of(context).textTheme,
+          child: StoreProvider(
+            store: _currentProductStore,
+            child: StoreProvider(
+              store: _cartStore,
+              child: MaterialApp(
+                title: 'CureLink',
+                debugShowCheckedModeBanner: false,
+                theme: ThemeData(
+                  colorSchemeSeed: const Color(0xff5a73d8),
+                  textTheme: GoogleFonts.comfortaaTextTheme(
+                    Theme.of(context).textTheme,
+                  ),
+                  scaffoldBackgroundColor: HexColor("#f6f8fe"),
+                  useMaterial3: true,
+                ),
+                initialRoute: '/',
+                routes: {
+                  '/': (context) => const MainPage(),
+                  '/login': (context) => const LoginPage(),
+                  '/signup': (context) => const SignupPage(),
+                  '/store': (context) => const StorePage(),
+                },
               ),
-              scaffoldBackgroundColor: HexColor("#f6f8fe"),
-              useMaterial3: true,
             ),
-            initialRoute: '/',
-            routes: {
-              '/': (context) => const MainPage(),
-              '/login': (context) => const LoginPage(),
-              '/signup': (context) => const SignupPage(),
-            },
           ),
         ),
       ),

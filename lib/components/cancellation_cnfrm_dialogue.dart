@@ -22,7 +22,7 @@ void showConformCancellationDialog(
           margin: const EdgeInsets.symmetric(horizontal: 16),
           padding: const EdgeInsets.only(top: 20, left: 24, right: 24),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.95),
+            color: HexColor("#f6f8fe").withOpacity(0.95),
             borderRadius: BorderRadius.circular(40),
             boxShadow: [
               BoxShadow(
@@ -43,17 +43,17 @@ void showConformCancellationDialog(
             body: Stack(
               clipBehavior: Clip.none,
               children: [
-                const Positioned(
+                Positioned(
                   left: 0,
                   right: 0,
                   top: -38,
                   child: CircleAvatar(
                     radius: 16,
-                    backgroundColor: Colors.white,
+                    backgroundColor: HexColor("#f6f8fe"),
                     child: Icon(
                       Icons.close,
                       size: 20,
-                      color: Colors.black,
+                      color: HexColor("#1a1a1c"),
                     ),
                   ),
                 ),
@@ -77,7 +77,7 @@ void showConformCancellationDialog(
                         Text(
                           "Are you sure you want to cancel this appointment?",
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.quicksand(
+                          style: GoogleFonts.comfortaa(
                             textStyle: TextStyle(
                                 color: HexColor("#1a1a1c"),
                                 fontSize: 19,
@@ -97,7 +97,7 @@ void showConformCancellationDialog(
                               duration: const Duration(milliseconds: 200),
                               content: Text(
                                 'Appointment Canceled!',
-                                style: GoogleFonts.lato(
+                                style: GoogleFonts.comfortaa(
                                   textStyle: TextStyle(
                                       color: HexColor("#e8e8e8"),
                                       fontSize: 15,
@@ -122,10 +122,10 @@ void showConformCancellationDialog(
                               ),
                             ),
                           ),
-                          child: const Text(
+                          child: Text(
                             "Yes, Cancel",
                             style: TextStyle(
-                                color: Colors.white,
+                                color: HexColor("#f6f8fe"),
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold),
                           ),

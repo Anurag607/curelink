@@ -26,7 +26,7 @@ class AppointmentCards extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.9,
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        color: HexColor("f6f8fe"),
+        color: HexColor("#f6f8fe"),
         borderRadius: const BorderRadius.all(Radius.circular(20)),
         boxShadow: const [
           BoxShadow(

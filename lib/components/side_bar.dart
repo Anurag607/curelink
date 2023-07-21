@@ -1,6 +1,7 @@
 import 'package:curelink/pages/profile_page.dart';
 import 'package:curelink/pages/schedule_page.dart';
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:curelink/utils/database.dart';
 
@@ -54,7 +55,7 @@ class _SideBarState extends State<SideBar> {
           ),
         ),
         child: DefaultTextStyle(
-          style: const TextStyle(color: Colors.white),
+          style: TextStyle(color: HexColor("#f6f8fe")),
           child: SizedBox(
             width: double.infinity,
             height: MediaQuery.of(context).size.height,
@@ -75,7 +76,7 @@ class _SideBarState extends State<SideBar> {
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium!
-                          .copyWith(color: Colors.white70),
+                          .copyWith(color: HexColor("#f6f8fe")),
                     ),
                   ),
                   ...sidebarMenus.map(
@@ -132,7 +133,7 @@ class _SideBarState extends State<SideBar> {
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium!
-                          .copyWith(color: Colors.white70),
+                          .copyWith(color: HexColor("#f6f8fe")),
                     ),
                   ),
                   ...sidebarMenus2

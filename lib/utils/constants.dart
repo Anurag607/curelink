@@ -19,3 +19,6 @@ List<dynamic> gradientList = [
   [HexColor("#B621FE"), HexColor("#1FD1F9")],
   [HexColor("#E975A8"), HexColor("#726CF8")],
 ];
+
+const kTextColor = Color(0xFF535353);
+const kTextLightColor = Color(0xFFACACAC);

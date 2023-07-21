@@ -21,11 +21,12 @@ class CustomBottomModalSheet {
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Stack(
               children: [
-                const Positioned(
+                Positioned(
                   top: 10,
                   left: 0,
                   right: 0,
-                  child: Icon(Icons.expand_more, color: Colors.white, size: 30),
+                  child: Icon(Icons.expand_more,
+                      color: HexColor("#f6f8fe"), size: 30),
                 ),
                 Container(
                   width: double.infinity,

@@ -118,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                                   child: Container(
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        color: Colors.white,
+                                        color: HexColor("#f6f8fe"),
                                         boxShadow: const [
                                           BoxShadow(
                                             color: Color.fromRGBO(
@@ -236,11 +236,12 @@ class _LoginPageState extends State<LoginPage> {
                                                 color: const Color.fromRGBO(
                                                     49, 39, 79, 1),
                                               ),
-                                              child: const Center(
+                                              child: Center(
                                                 child: Text(
                                                   "Login",
                                                   style: TextStyle(
-                                                      color: Colors.white),
+                                                      color:
+                                                          HexColor("#f6f8fe")),
                                                 ),
                                               ),
                                             ))),

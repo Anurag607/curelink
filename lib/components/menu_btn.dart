@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:rive/rive.dart';
 import 'package:curelink/models/menu.dart';
 import 'package:curelink/redux/states/sidebar_state.dart';
@@ -35,10 +36,10 @@ class MenuBtn extends StatelessWidget {
                   margin: const EdgeInsets.only(left: 12),
                   height: hide ? 40 : 0,
                   width: hide ? 40 : 0,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
+                  decoration: BoxDecoration(
+                    color: HexColor("#f6f8fe"),
                     shape: BoxShape.circle,
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                         color: Colors.black12,
                         offset: Offset(0, 3),

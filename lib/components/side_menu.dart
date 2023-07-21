@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:rive/rive.dart';
 import 'package:curelink/utils/database.dart';
@@ -70,7 +69,7 @@ class SideMenuCard extends StatelessWidget {
                 ),
                 title: Text(
                   menu.title,
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: HexColor("#f6f8fe")),
                 ),
               ),
             ],
@@ -124,9 +123,9 @@ class _SideMenuState extends State<SideMenu> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 24, bottom: 10, top: 10),
-          child: Divider(color: Colors.white24, height: 1),
+        Padding(
+          padding: const EdgeInsets.only(left: 24, bottom: 10, top: 10),
+          child: Divider(color: HexColor("#f6f8fe"), height: 1),
         ),
         SideMenuCard(
           menu: menu,

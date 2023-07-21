@@ -1,5 +1,8 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:curelink/models/product.dart';
+import 'package:curelink/redux/states/cart_state.dart';
+
 import '../../models/menu.dart';
 
 class UpdateNavigationIndexAction {
@@ -25,4 +28,36 @@ class UpdateUserDetailsAction {
     this.email,
     this.phoneNumber,
   );
+}
+
+class AddtoCartAction {
+  Product product;
+  int productQty;
+  AddtoCartAction(this.product, this.productQty);
+}
+
+class RemovefromCartAction {
+  Product product;
+  RemovefromCartAction(this.product);
+}
+
+class UpdateCartAction {
+  Product product;
+  int productQty;
+  UpdateCartAction(this.product, this.productQty);
+}
+
+class SetCartAction {
+  List<dynamic> cart;
+  SetCartAction(this.cart);
+}
+
+class DeleteCartAction {
+  DeleteCartAction();
+}
+
+class UpdateCurrentProductAction {
+  Product? product;
+  int currentProductQty;
+  UpdateCurrentProductAction(this.product, this.currentProductQty);
 }

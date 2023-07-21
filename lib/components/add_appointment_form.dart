@@ -41,12 +41,6 @@ class _AddAppointmentFormState extends State<AddAppointmentForm> {
 
   @override
   void initState() {
-    if (_curelinkData.get("Appointments") == null) {
-      db.saveCart();
-    } else {
-      db.getCart();
-    }
-
     dateString = widget.dateString;
 
     _time = Time(hour: now.hour, minute: now.minute, second: now.second);
@@ -68,7 +62,7 @@ class _AddAppointmentFormState extends State<AddAppointmentForm> {
     duration: const Duration(milliseconds: 200),
     content: Text(
       'Appointment Booked Successfully!',
-      style: GoogleFonts.lato(
+      style: GoogleFonts.comfortaa(
         textStyle: TextStyle(
             color: HexColor("#e8e8e8"),
             fontSize: 15,
@@ -276,10 +270,10 @@ class _AddAppointmentFormState extends State<AddAppointmentForm> {
                     Icons.add_box,
                     color: HexColor("#f79729"),
                   ),
-                  label: const Text(
+                  label: Text(
                     "Add Appointment",
                     style: TextStyle(
-                        color: Colors.white,
+                        color: HexColor("#f6f8fe"),
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),

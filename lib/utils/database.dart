@@ -8,7 +8,7 @@ class CureLinkDatabase {
   final timeFormat = DateFormat.jm();
   final now = DateTime.now();
 
-  DateTime _formatConvertor(DateTime dateTime, String time) {
+  DateTime formatConvertor(DateTime dateTime, String time) {
     return DateTime.parse(DateFormat('yyyy-MM-dd HH:mm').format(
             DateTime.parse("${DateFormat("yyyy-MM-dd").format(dateTime)} $time")
                 .toLocal()))
@@ -46,9 +46,9 @@ class CureLinkDatabase {
 // ################################### CART ###################################
 
   // Function to save the cart...
-  void saveCart() {
+  void saveCart(dynamic cartData) {
     log('Saving cart...');
-    _curelinkData.put('cart', cart);
+    _curelinkData.put('cart', cartData);
   }
 
   // Function to get the cart...
@@ -83,7 +83,7 @@ class CureLinkDatabase {
     }
 
     cart.add(item);
-    saveCart();
+    saveCart(cart);
     getCart();
   }
 
@@ -96,7 +96,7 @@ class CureLinkDatabase {
     if (ls[0]) {
       log('Item found in cart...');
       cart.removeAt(ls[1]);
-      saveCart();
+      saveCart(cart);
       getCart();
     } else {
       log('Item not found in cart...');
@@ -107,7 +107,7 @@ class CureLinkDatabase {
   void clearCart() {
     log('Clearing cart...');
     cart.clear();
-    saveCart();
+    saveCart(cart);
     getCart();
   }
 

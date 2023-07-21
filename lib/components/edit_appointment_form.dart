@@ -45,12 +45,6 @@ class _EditAppointmentFormState extends State<EditAppointmentForm> {
 
   @override
   void initState() {
-    if (_curelinkData.get("Appointments") == null) {
-      db.saveCart();
-    } else {
-      db.getCart();
-    }
-
     dateString = widget.dateString;
     appointmentIndex = widget.appointmentIndex;
     appointmentData = db.cart[appointmentIndex];
@@ -72,7 +66,7 @@ class _EditAppointmentFormState extends State<EditAppointmentForm> {
     duration: const Duration(milliseconds: 200),
     content: Text(
       'Appointment Reshceduled Successfully!',
-      style: GoogleFonts.lato(
+      style: GoogleFonts.comfortaa(
         textStyle: TextStyle(
             color: HexColor("#e8e8e8"),
             fontSize: 15,
@@ -276,10 +270,10 @@ class _EditAppointmentFormState extends State<EditAppointmentForm> {
                     Icons.edit_document,
                     color: HexColor("#f79729"),
                   ),
-                  label: const Text(
+                  label: Text(
                     "Edit Appointment",
                     style: TextStyle(
-                        color: Colors.white,
+                        color: HexColor("#f6f8fe"),
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),

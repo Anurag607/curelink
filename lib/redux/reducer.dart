@@ -1,12 +1,16 @@
+import 'package:curelink/models/product.dart';
+import 'package:curelink/redux/states/cart_state.dart';
 import 'package:curelink/redux/states/sidebar_state.dart';
 import 'package:curelink/redux/states/user_details_state.dart';
+import 'package:curelink/utils/database.dart';
 
 import 'actions.dart';
 import 'states/navigation_state.dart';
 
+CureLinkDatabase db = CureLinkDatabase();
+
 NavigationState navigationReducer(NavigationState state, dynamic action) {
   if (action is UpdateNavigationIndexAction) {
-    action.navigationIndex = action.navigationIndex;
     return NavigationState(tabIndex: action.navigationIndex);
   }
   return state;
@@ -14,7 +18,6 @@ NavigationState navigationReducer(NavigationState state, dynamic action) {
 
 SidebarMenuState sidebarMenuReducer(SidebarMenuState state, dynamic action) {
   if (action is UpdateSelectedTabAction) {
-    action.selectedTab = action.selectedTab;
     return SidebarMenuState(
         selectedTab: action.selectedTab, isClosed: action.isClosed);
   }
@@ -32,6 +35,48 @@ UserDetailsState userDetailsReducer(UserDetailsState state, dynamic action) {
       displayName: action.displayName,
       email: action.email,
       phoneNumber: action.phoneNumber,
+    );
+  }
+  return state;
+}
+
+CartState updateCartReducer(CartState state, dynamic action) {
+  if (action is AddtoCartAction) {
+    Product temp = action.product;
+    temp.quantity = action.productQty;
+    db.saveCart([...state.cart, temp]);
+    db.getCart();
+    return CartState(cart: [...state.cart, temp]);
+  } else if (action is UpdateCartAction) {
+    List<dynamic> tempCart = state.cart;
+    int index =
+        tempCart.indexWhere((element) => element.id == action.product.id);
+    tempCart[index].quantity = action.productQty;
+    db.saveCart([...tempCart]);
+    db.getCart();
+    return CartState(cart: [...tempCart]);
+  } else if (action is RemovefromCartAction) {
+    List<dynamic> tempCart = state.cart;
+    tempCart.removeWhere((element) => element.id == action.product.id);
+    db.saveCart([...tempCart]);
+    db.getCart();
+    return CartState(cart: [...tempCart]);
+  } else if (action is DeleteCartAction) {
+    db.saveCart([]);
+    db.getCart();
+    return CartState(cart: []);
+  } else if (action is SetCartAction) {
+    return CartState(cart: action.cart);
+  }
+  return state;
+}
+
+CurrentProductState updateCurrentProductReducer(
+    CurrentProductState state, dynamic action) {
+  if (action is UpdateCurrentProductAction) {
+    return CurrentProductState(
+      currentProduct: action.product,
+      currentProductQty: action.currentProductQty,
     );
   }
   return state;

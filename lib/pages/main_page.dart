@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:curelink/Firebase/fire_auth.dart';
 import 'package:curelink/Templates/standard_screen.dart';
 import 'package:curelink/components/top_bar.dart';
+import 'package:curelink/pages/Store/home_screen.dart';
 import 'package:curelink/redux/states/navigation_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -67,23 +68,18 @@ class _MainPageState extends State<MainPage>
 
   late List<Widget> _widgetOptions = <Widget>[];
 
+  // Defining main widgets for each screen...
   @override
   void initState() {
     _widgetOptions = [
+      // Home Page...
       const ThemedScreen(
         topBar: TopBar(),
         child: HomePage(),
       ),
-      ThemedScreen(
-        topBar: Text(
-          "Store",
-          style: TextStyle(
-              fontSize: 25,
-              color: HexColor("#f6f8fe"),
-              fontWeight: FontWeight.bold),
-        ),
-        child: Container(),
-      ),
+      // Store Page...
+      const StorePage(),
+      // Chat Page...
       ThemedScreen(
         topBar: Text(
           "Chat",

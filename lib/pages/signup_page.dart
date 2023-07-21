@@ -118,7 +118,7 @@ class _SignupPageState extends State<SignupPage> {
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
-                                          color: Colors.white,
+                                          color: HexColor("#f6f8fe"),
                                           boxShadow: const [
                                             BoxShadow(
                                               color: Color.fromRGBO(
@@ -269,11 +269,11 @@ class _SignupPageState extends State<SignupPage> {
                                             color: const Color.fromRGBO(
                                                 49, 39, 79, 1),
                                           ),
-                                          child: const Center(
+                                          child: Center(
                                             child: Text(
                                               "SignUp",
                                               style: TextStyle(
-                                                  color: Colors.white),
+                                                  color: HexColor("#f6f8fe")),
                                             ),
                                           ),
                                         ))),

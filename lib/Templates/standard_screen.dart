@@ -39,7 +39,6 @@ class ThemedScreen extends StatelessWidget {
                 color: Colors.transparent),
           ),
           LiquidPullToRefresh(
-            // key: _refreshIndicatorKey,
             springAnimationDurationInMilliseconds: 300,
             height: 150,
             color: Colors.transparent,
@@ -48,7 +47,6 @@ class ThemedScreen extends StatelessWidget {
             onRefresh: () async {
               db.getCart();
               await Future.delayed(const Duration(seconds: 2));
-              // _refreshIndicatorKey.currentState?.show();
             },
             showChildOpacityTransition: true,
             child: SizedBox(

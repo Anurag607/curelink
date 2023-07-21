@@ -39,10 +39,10 @@ class InfoCard extends StatelessWidget {
                   leading: CircleAvatar(
                     backgroundColor: HexColor("#5D3FD3"),
                     radius: 24,
-                    child: const Icon(
+                    child: Icon(
                       CupertinoIcons.person,
                       size: 28,
-                      color: Colors.white,
+                      color: HexColor("#f6f8fe"),
                     ),
                   ),
                   title: (CustomScripts.validateUserObjects(
