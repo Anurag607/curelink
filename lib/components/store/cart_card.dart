@@ -110,7 +110,12 @@ class CartCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: press,
+      onTap: () {
+        StoreProvider.of<CurrentProductState>(context).dispatch(
+          UpdateCurrentProductAction(product, product.quantity),
+        );
+        press();
+      },
       child: Container(
         width: MediaQuery.of(context).size.width * 0.9,
         margin: const EdgeInsets.only(bottom: 20),

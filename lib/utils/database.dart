@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:curelink/models/product.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
@@ -19,7 +20,7 @@ class CureLinkDatabase {
   Map<dynamic, dynamic> appointments = {};
 
   // type: List<Map<string, dynamic>>
-  late List<dynamic> cart = [];
+  late List<Product> cart = [];
 
   final _curelinkData = Hive.box('curelinkData');
 
@@ -46,7 +47,7 @@ class CureLinkDatabase {
 // ################################### CART ###################################
 
   // Function to save the cart...
-  void saveCart(dynamic cartData) {
+  void saveCart(List<Product> cartData) {
     log('Saving cart...');
     _curelinkData.put('cart', cartData);
   }
@@ -58,12 +59,12 @@ class CureLinkDatabase {
   }
 
   // Function to check if the item is in the cart...
-  List<dynamic> isInCart(Map<dynamic, dynamic> item) {
+  List<dynamic> isInCart(Product item) {
     log('Checking if item is in cart...');
 
     // Check if the item is in the cart...
     for (var i = 0; i < cart.length; i++) {
-      if (cart[i]['id'] == item['id']) {
+      if (cart[i].id == item.id) {
         log('Item found in cart...');
         return [true, i];
       }
@@ -74,7 +75,7 @@ class CureLinkDatabase {
   }
 
   // Function to add an item to the cart...
-  void addToCart(Map<dynamic, dynamic> item) {
+  void addToCart(Product item) {
     log('Adding item to cart...');
 
     if (isInCart(item)[0]) {
@@ -88,7 +89,7 @@ class CureLinkDatabase {
   }
 
   // Function to remove an item from the cart...
-  void removeFromCart(Map<dynamic, dynamic> item) {
+  void removeFromCart(Product item) {
     log('Removing item from cart...');
 
     List<dynamic> ls = isInCart(item);

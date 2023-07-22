@@ -46,8 +46,6 @@ class _EditAppointmentFormState extends State<EditAppointmentForm> {
   @override
   void initState() {
     dateString = widget.dateString;
-    appointmentIndex = widget.appointmentIndex;
-    appointmentData = db.cart[appointmentIndex];
     _time = Time(
         hour: appointmentData["time"].hour,
         minute: appointmentData["time"].minute,
@@ -58,8 +56,6 @@ class _EditAppointmentFormState extends State<EditAppointmentForm> {
 
   void handleSubmit() {
     _editAppointmentFormKey.currentState!.save();
-
-    // db.updateCardItem(dateString, appointmentIndex, appointmentData);
   }
 
   final snackBar = SnackBar(

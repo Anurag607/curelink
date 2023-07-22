@@ -10,9 +10,11 @@ class AddToCart extends StatelessWidget {
   const AddToCart({
     super.key,
     required this.product,
+    required this.inCart,
   });
 
   final Product product;
+  final bool inCart;
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +32,17 @@ class AddToCart extends StatelessWidget {
               backgroundColor: HexColor('#5D3FD3'),
             ),
             onPressed: () {
+              if (!inCart) {
+                StoreProvider.of<CartState>(context).dispatch(
+                  AddtoCartAction(
+                    currentProductDetails.currentProduct,
+                    currentProductDetails.currentProductQty,
+                  ),
+                );
+                return;
+              }
               StoreProvider.of<CartState>(context).dispatch(
-                AddtoCartAction(
+                UpdateCartAction(
                   currentProductDetails.currentProduct,
                   currentProductDetails.currentProductQty,
                 ),
@@ -48,7 +59,7 @@ class AddToCart extends StatelessWidget {
                   ),
                   const SizedBox(width: 15),
                   Text(
-                    "Add To Cart".toUpperCase(),
+                    (inCart ? "Update Cart" : "Add To Cart").toUpperCase(),
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,

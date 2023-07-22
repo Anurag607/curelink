@@ -47,7 +47,7 @@ class UpdateCartAction {
 }
 
 class SetCartAction {
-  List<dynamic> cart;
+  List<Product> cart;
   SetCartAction(this.cart);
 }
 

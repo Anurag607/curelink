@@ -5,6 +5,7 @@ import 'package:curelink/Templates/standard_screen.dart';
 import 'package:curelink/components/top_bar.dart';
 import 'package:curelink/pages/Store/home_screen.dart';
 import 'package:curelink/redux/states/navigation_state.dart';
+import 'package:curelink/utils/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -68,9 +69,12 @@ class _MainPageState extends State<MainPage>
 
   late List<Widget> _widgetOptions = <Widget>[];
 
+  CureLinkDatabase db = CureLinkDatabase();
+
   // Defining main widgets for each screen...
   @override
   void initState() {
+    // db.clearDatabase();
     _widgetOptions = [
       // Home Page...
       const ThemedScreen(

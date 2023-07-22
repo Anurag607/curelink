@@ -8,7 +8,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 part 'productAdapter.g.dart';
 
 @HiveType(typeId: 0)
-class Product {
+class Product extends HiveObject {
   @HiveField(0)
   final String image;
   @HiveField(1)

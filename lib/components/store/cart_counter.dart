@@ -4,13 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 class CartCounter extends StatefulWidget {
-  const CartCounter({super.key});
+  final bool inCart;
+  const CartCounter({super.key, required this.inCart});
 
   @override
   State<CartCounter> createState() => _CartCounterState();
 }
 
 class _CartCounterState extends State<CartCounter> {
+  late bool inCart = false;
+
+  @override
+  void initState() {
+    super.initState();
+    inCart = widget.inCart;
+  }
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<CurrentProductState, dynamic>(
@@ -21,7 +30,19 @@ class _CartCounterState extends State<CartCounter> {
             buildOutlineButton(
               icon: Icons.remove,
               press: () {
-                if (currentProductDetails.currentProductQty > 1) {
+                if (currentProductDetails.currentProductQty <= 1 && inCart) {
+                  setState(
+                    () {
+                      StoreProvider.of<CartState>(context).dispatch(
+                        RemovefromCartAction(
+                          currentProductDetails.currentProduct,
+                        ),
+                      );
+                      currentProductDetails.currentProductQty = 0;
+                    },
+                  );
+                  return;
+                } else if (currentProductDetails.currentProductQty > 1) {
                   setState(
                     () {
                       StoreProvider.of<CurrentProductState>(context).dispatch(

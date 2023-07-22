@@ -44,14 +44,24 @@ UserDetailsState userDetailsReducer(UserDetailsState state, dynamic action) {
 
 CartState updateCartReducer(CartState state, dynamic action) {
   if (action is AddtoCartAction) {
+    List<Product> tempCart = state.cart;
     Product temp = action.product;
+    int index =
+        tempCart.indexWhere((element) => element.id == action.product.id);
+    if (index != -1) {
+      tempCart[index].quantity += action.productQty;
+      log(tempCart.toString());
+      db.saveCart(tempCart);
+      db.getCart();
+      return CartState(cart: tempCart);
+    }
     temp.quantity = action.productQty;
-    log("temp: $temp");
+    log("temp: ${temp.title.toString()}");
     db.saveCart([...state.cart, temp]);
     db.getCart();
     return CartState(cart: [...state.cart, temp]);
   } else if (action is UpdateCartAction) {
-    List<dynamic> tempCart = state.cart;
+    List<Product> tempCart = state.cart;
     int index =
         tempCart.indexWhere((element) => element.id == action.product.id);
     tempCart[index].quantity = action.productQty;
@@ -59,7 +69,7 @@ CartState updateCartReducer(CartState state, dynamic action) {
     db.getCart();
     return CartState(cart: [...tempCart]);
   } else if (action is RemovefromCartAction) {
-    List<dynamic> tempCart = state.cart;
+    List<Product> tempCart = state.cart;
     tempCart.removeWhere((element) => element.id == action.product.id);
     db.saveCart([...tempCart]);
     db.getCart();

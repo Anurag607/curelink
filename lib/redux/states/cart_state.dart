@@ -1,7 +1,7 @@
 import 'package:curelink/models/product.dart';
 
 class CartState {
-  List<dynamic> cart;
+  List<Product> cart;
 
   CartState({required this.cart});
 }
