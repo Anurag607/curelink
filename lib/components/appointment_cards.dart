@@ -9,6 +9,7 @@ class AppointmentCards extends StatelessWidget {
   final String appointmentDate;
   final String appointmentTime;
   final String image;
+  final String type;
 
   const AppointmentCards(
       {required this.actions,
@@ -17,6 +18,7 @@ class AppointmentCards extends StatelessWidget {
       required this.appointmentDate,
       required this.appointmentTime,
       required this.image,
+      required this.type,
       Key? key})
       : super(key: key);
 
@@ -87,24 +89,37 @@ class AppointmentCards extends StatelessWidget {
                         color: HexColor("#5a73d8"), size: 16),
                     const SizedBox(width: 4),
                     Padding(
-                      padding: const EdgeInsets.only(right: 8, left: 0),
-                      child: Text(appointmentDate,
-                          style: TextStyle(
-                            color: HexColor("#37474f"),
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          )),
+                      padding: const EdgeInsets.only(
+                        right: 0,
+                        left: 0,
+                        top: 3,
+                      ),
+                      child: Text(
+                        appointmentDate,
+                        style: TextStyle(
+                          color: HexColor("#37474f"),
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
+                    const SizedBox(width: 6),
                     Icon(Ionicons.time, color: HexColor("#5a73d8"), size: 16),
-                    const SizedBox(width: 4),
+                    const SizedBox(width: 2.5),
                     Padding(
-                      padding: const EdgeInsets.only(right: 0, left: 0),
-                      child: Text(appointmentTime,
-                          style: TextStyle(
-                            color: HexColor("#37474f"),
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          )),
+                      padding: const EdgeInsets.only(
+                        right: 0,
+                        left: 0,
+                        top: 2.5,
+                      ),
+                      child: Text(
+                        appointmentTime,
+                        style: TextStyle(
+                          color: HexColor("#37474f"),
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ],
                 ),

@@ -1,6 +1,9 @@
+import 'package:curelink/models/appointment.dart';
+import 'package:curelink/models/appointment_data.dart';
 import 'package:curelink/widgets/calendar.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter/material.dart';
+import 'package:curelink/utils/constants.dart';
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key});
@@ -9,38 +12,7 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  final List<dynamic> _gradientList = [
-    [HexColor("#AD1DEB"), HexColor("#6E72FC")],
-    [HexColor("#5D3FD3"), HexColor("#1FD1F9")],
-    [HexColor("#B621FE"), HexColor("#1FD1F9")],
-    [HexColor("#E975A8"), HexColor("#726CF8")],
-  ];
-
-  List appointments = [
-    {
-      "name": "Dr. Brijesh Patel",
-      "desc": "Cardiologist",
-      "appointmentDate": "Today",
-      "appointmentTime": "14:00 - 15:30 AM",
-      "image": "assets/avaters/doctor_1.jpg"
-    },
-    {
-      "name": "Dr. Anthony Leeway",
-      "desc": "Dental Specialist",
-      "appointmentDate": "Today",
-      "appointmentTime": "14:00 - 15:30 AM",
-      "image": "assets/avaters/doctor_2.jpg"
-    },
-    {
-      "name": "Dr. Adison Ashley",
-      "desc": "Dental Specialist",
-      "appointmentDate": "Today",
-      "appointmentTime": "14:00 - 15:30 AM",
-      "image": "assets/avaters/doctor_3.jpg"
-    },
-  ];
-
-  void updateAppointmentList(List data) {
+  void updateAppointmentList(List<Appointment> data) {
     setState(() {
       appointments = data.reversed.toList();
     });
@@ -57,7 +29,7 @@ class _SchedulePageState extends State<SchedulePage> {
           gradient: LinearGradient(
             begin: const Alignment(-1, -1),
             end: const Alignment(1, 1),
-            colors: _gradientList[1],
+            colors: gradientList[1],
           ),
         ),
         child: Column(

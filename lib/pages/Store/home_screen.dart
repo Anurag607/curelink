@@ -2,12 +2,13 @@
 
 import 'package:curelink/components/store/categories.dart';
 import 'package:curelink/components/store/item_card.dart';
+import 'package:curelink/models/product.dart';
 import 'package:curelink/pages/Store/cart_page.dart';
 import 'package:curelink/redux/actions.dart';
 import 'package:curelink/redux/states/cart_state.dart';
 import 'package:curelink/utils/database.dart';
 import 'package:flutter/material.dart';
-import 'package:curelink/models/product.dart';
+import 'package:curelink/models/product_data.dart';
 import 'package:curelink/pages/Store/details_screen.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,7 +41,8 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     if (_curelinkData.get('cart') == null) {
-      db.saveCart([]);
+      List<Product> cart = [];
+      db.saveCart(cart);
     } else {
       db.getCart();
     }

@@ -24,17 +24,7 @@ class ItemCard extends StatelessWidget {
             child: Container(
               width: 200,
               padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: HexColor("#f6f8fe"),
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
-                boxShadow: [
-                  BoxShadow(
-                    color: HexColor("#c5c5c5"),
-                    blurRadius: 4,
-                    offset: const Offset(0.5, 2),
-                  ),
-                ],
-              ),
+              color: HexColor("#666fdb").withOpacity(0.05),
               child: Hero(
                 tag: "${product.id}",
                 child: Image.asset(product.image),

@@ -1,7 +1,9 @@
 // ignore_for_file: dead_code, use_build_context_synchronously, unused_element
 
 import 'package:curelink/Firebase/fire_auth.dart';
+import 'package:curelink/models/appointment_data.dart';
 import 'package:curelink/redux/states/user_details_state.dart';
+import 'package:curelink/utils/constants.dart';
 import 'package:curelink/utils/database.dart';
 import 'package:curelink/widgets/past_appointment_menu.dart';
 import 'package:curelink/widgets/past_orders_menu.dart';
@@ -21,37 +23,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final List<dynamic> _gradientList = [
-    [HexColor("#AD1DEB"), HexColor("#6E72FC")],
-    [HexColor("#5D3FD3"), HexColor("#1FD1F9")],
-    [HexColor("#B621FE"), HexColor("#1FD1F9")],
-    [HexColor("#E975A8"), HexColor("#726CF8")],
-  ];
-
-  List<dynamic> appointments = [
-    {
-      "name": "Dr. Brijesh Patel",
-      "desc": "Cardiologist",
-      "appointmentDate": "Today",
-      "appointmentTime": "14:00 - 15:30 AM",
-      "image": "assets/avaters/doctor_1.jpg"
-    },
-    {
-      "name": "Dr. Anthony Leeway",
-      "desc": "Dental Specialist",
-      "appointmentDate": "Today",
-      "appointmentTime": "14:00 - 15:30 AM",
-      "image": "assets/avaters/doctor_2.jpg"
-    },
-    {
-      "name": "Dr. Adison Ashley",
-      "desc": "Dental Specialist",
-      "appointmentDate": "Today",
-      "appointmentTime": "14:00 - 15:30 AM",
-      "image": "assets/avaters/doctor_3.jpg"
-    },
-  ];
-
   List<dynamic> orders = [];
 
   List<dynamic> settings = [];
@@ -126,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           gradient: LinearGradient(
                               begin: const Alignment(-1, -1),
                               end: const Alignment(1, 1),
-                              colors: _gradientList[0]),
+                              colors: gradientList[1]),
                           borderRadius: const BorderRadius.only(
                               bottomLeft: Radius.circular(200),
                               bottomRight: Radius.circular(200)),

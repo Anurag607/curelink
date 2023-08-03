@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:curelink/models/doctor_data.dart';
 import 'dart:developer';
 
 class CustomScripts {
@@ -28,5 +29,18 @@ class CustomScripts {
     log("userDetailsEmail: ${userDetails.email}");
     return ((currentUser != null && currentUser.email != null) ||
         (userDetails != null && userDetails.email != null));
+  }
+}
+
+class FilterAppointments {
+  static List<dynamic> filterAppointments(String query) {
+    List<dynamic> results = [];
+    for (var element in doctors) {
+      if (element.name.toLowerCase().contains(query.toLowerCase()) ||
+          element.desc.toLowerCase().contains(query.toLowerCase())) {
+        results.add(element);
+      }
+    }
+    return results;
   }
 }

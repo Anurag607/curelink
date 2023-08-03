@@ -1,8 +1,5 @@
-// ignore_for_file: non_constant_identifier_names
-
+import 'package:curelink/models/menu.dart';
 import 'package:curelink/models/product.dart';
-
-import '../../models/menu.dart';
 
 class UpdateNavigationIndexAction {
   int navigationIndex;

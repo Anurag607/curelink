@@ -1,32 +1,10 @@
 import 'dart:collection';
+import 'package:curelink/models/appointment.dart';
+import 'package:curelink/models/appointment_data.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-List appointments = [
-  {
-    "name": "Dr. Brijesh Patel",
-    "desc": "Cardiologist",
-    "appointmentDate": "Today",
-    "appointmentTime": "14:00 - 15:30 PM",
-    "image": "assets/avaters/doctor_1.jpg"
-  },
-  {
-    "name": "Dr. Anthony Leeway",
-    "desc": "Dental Specialist",
-    "appointmentDate": "Today",
-    "appointmentTime": "14:00 - 15:30 PM",
-    "image": "assets/avaters/doctor_2.jpg"
-  },
-  {
-    "name": "Dr. Adison Ashley",
-    "desc": "Dental Specialist",
-    "appointmentDate": "Today",
-    "appointmentTime": "14:00 - 15:30 PM",
-    "image": "assets/avaters/doctor_3.jpg"
-  },
-];
-
 /// Appointments (Using a [LinkedHashMap] is highly recommended if you decide to use a map).
-final kAppointments = LinkedHashMap<DateTime, List<dynamic>>(
+final kAppointments = LinkedHashMap<DateTime, List<Appointment>>(
   equals: isSameDay,
   hashCode: getHashCode,
 )..addAll(_kAppointmentSource);

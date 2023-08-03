@@ -16,7 +16,7 @@ class CureLinkDatabase {
         .toLocal();
   }
 
-  // type: Map<DateTime, List<Map<String, dynamic>>>
+  // type: Map<DateTime, List<Appointment>>
   Map<dynamic, dynamic> appointments = {};
 
   // type: List<Map<string, dynamic>>
@@ -54,7 +54,7 @@ class CureLinkDatabase {
 
   // Function to get the cart...
   void getCart() {
-    cart = _curelinkData.get('cart') ?? cart;
+    cart = [..._curelinkData.get('cart')];
     log('got_cart: ${cart.length}');
   }
 

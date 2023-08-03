@@ -2,9 +2,9 @@
 
 import 'dart:collection';
 
-import 'package:curelink/components/add_appointment_form.dart';
 import 'package:curelink/components/appointment_cards.dart';
 import 'package:curelink/components/custom_modal_bottom_sheet.dart';
+import 'package:curelink/models/appointment.dart';
 import 'package:curelink/utils/database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,7 +26,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   final _curelinkData = Hive.box('curelinkData');
   CureLinkDatabase db = CureLinkDatabase();
 
-  late final ValueNotifier<List<dynamic>> _selectedAppointments;
+  late final ValueNotifier<List<Appointment>> _selectedAppointments;
   final ValueNotifier<DateTime> _focusedDay = ValueNotifier(DateTime.now());
   final Set<DateTime> _selectedDays = LinkedHashSet<DateTime>(
     equals: isSameDay,
@@ -95,19 +95,19 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   bool get canClearSelection =>
       _selectedDays.isNotEmpty || _rangeStart != null || _rangeEnd != null;
 
-  List<dynamic> _getAppointmentsForDay(DateTime day) {
+  List<Appointment> _getAppointmentsForDay(DateTime day) {
     return kAppointments[day] ?? [];
   }
 
   // List containing the appointment list for the selected day (single day)...
-  List<dynamic> _getAppointmentsForDays(Iterable<DateTime> days) {
+  List<Appointment> _getAppointmentsForDays(Iterable<DateTime> days) {
     return [
       for (final d in days) ..._getAppointmentsForDay(d),
     ];
   }
 
   // List containing the appointment list for the selected range of days...
-  List<dynamic> _getAppointmentsForRange(DateTime start, DateTime end) {
+  List<Appointment> _getAppointmentsForRange(DateTime start, DateTime end) {
     final days = daysInRange(start, end);
     return _getAppointmentsForDays(days);
   }
@@ -269,7 +269,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                     child: Expanded(
                       child: Column(
                         children: [
-                          ValueListenableBuilder<List<dynamic>>(
+                          ValueListenableBuilder<List<Appointment>>(
                             valueListenable: _selectedAppointments,
                             builder: (context, value, _) {
                               return ListView.builder(
@@ -282,14 +282,15 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16),
                                     child: AppointmentCards(
-                                      name: value[index]["name"],
-                                      desc: value[index]["desc"],
-                                      appointmentDate: value[index]
-                                          ["appointmentDate"],
-                                      appointmentTime: value[index]
-                                          ["appointmentTime"],
-                                      image: value[index]["image"],
+                                      name: value[index].name,
+                                      desc: value[index].desc,
+                                      appointmentDate: DateFormat("yMMMMd")
+                                          .format(value[index].appointmentDate),
+                                      appointmentTime:
+                                          "${DateFormat.jm().format(value[index].appointmentTime[0])}-${DateFormat.jm().format(value[index].appointmentTime[1])}",
+                                      image: value[index].image,
                                       actions: true,
+                                      type: 'update',
                                     ),
                                   );
                                 },
@@ -345,15 +346,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                 height: 15,
               ),
               ElevatedButton.icon(
-                onPressed: () {
-                  CustomBottomModalSheet.customBottomModalSheet(
-                    context,
-                    400,
-                    AddAppointmentForm(
-                      dateString: _extractedDay(_focusedDay.value),
-                    ),
-                  );
-                },
+                onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HexColor("#5D3FD3"),
                   padding:

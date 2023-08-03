@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'productAdapter.dart';
+part of 'product.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
@@ -8,7 +8,7 @@ part of 'productAdapter.dart';
 
 class ProductAdapter extends TypeAdapter<Product> {
   @override
-  final int typeId = 0;
+  final int typeId = 9;
 
   @override
   Product read(BinaryReader reader) {
@@ -23,15 +23,14 @@ class ProductAdapter extends TypeAdapter<Product> {
       price: fields[4] as int,
       description: fields[2] as String,
       type: fields[3] as String,
-      color: fields[6] as Color,
-      quantity: fields[7] as int,
+      quantity: fields[6] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, Product obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.image)
       ..writeByte(1)
@@ -45,8 +44,6 @@ class ProductAdapter extends TypeAdapter<Product> {
       ..writeByte(5)
       ..write(obj.id)
       ..writeByte(6)
-      ..write(obj.color)
-      ..writeByte(7)
       ..write(obj.quantity);
   }
 
