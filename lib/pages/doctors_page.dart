@@ -2,6 +2,7 @@ import 'package:curelink/components/doctor_cards.dart';
 import 'package:curelink/models/doctor_data.dart';
 import 'package:curelink/utils/scripts.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class DoctorsPage extends StatefulWidget {
@@ -67,6 +68,11 @@ class _DoctorsPageState extends State<DoctorsPage>
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         toolbarHeight: 100.00,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.dark,
+        ),
       ),
       backgroundColor: HexColor("#f6f8fe"),
       body: Container(

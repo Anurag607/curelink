@@ -11,10 +11,12 @@ class AddToCart extends StatelessWidget {
     super.key,
     required this.product,
     required this.inCart,
+    required this.press,
   });
 
   final Product product;
   final bool inCart;
+  final VoidCallback press;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,9 @@ class AddToCart extends StatelessWidget {
                 StoreProvider.of<CartState>(context).dispatch(
                   AddtoCartAction(
                     currentProductDetails.currentProduct,
-                    currentProductDetails.currentProductQty,
+                    currentProductDetails.currentProductQty <= 0
+                        ? 1
+                        : currentProductDetails.currentProductQty,
                   ),
                 );
                 return;
@@ -44,7 +48,9 @@ class AddToCart extends StatelessWidget {
               StoreProvider.of<CartState>(context).dispatch(
                 UpdateCartAction(
                   currentProductDetails.currentProduct,
-                  currentProductDetails.currentProductQty,
+                  currentProductDetails.currentProductQty <= 0
+                      ? 1
+                      : currentProductDetails.currentProductQty,
                 ),
               );
             },

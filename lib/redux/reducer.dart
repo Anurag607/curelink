@@ -44,42 +44,64 @@ UserDetailsState userDetailsReducer(UserDetailsState state, dynamic action) {
 
 CartState updateCartReducer(CartState state, dynamic action) {
   if (action is AddtoCartAction) {
+    // Add to Cart...
     List<Product> tempCart = state.cart;
+    int prevPrice = state.totalPrice;
     Product temp = action.product;
     int index =
         tempCart.indexWhere((element) => element.id == action.product.id);
     if (index != -1) {
+      prevPrice -= tempCart[index].price * tempCart[index].quantity;
+      prevPrice += action.product.price * action.product.quantity;
       tempCart[index].quantity += action.productQty;
       log(tempCart.toString());
-      db.saveCart(tempCart);
+      db.saveCart(tempCart, prevPrice);
       db.getCart();
-      return CartState(cart: tempCart);
+      return CartState(
+        cart: [...tempCart],
+        totalPrice: prevPrice,
+      );
     }
     temp.quantity = action.productQty;
+    prevPrice += temp.quantity * temp.price;
     log("temp: ${temp.title.toString()}");
-    db.saveCart([...state.cart, temp]);
+    db.saveCart([...state.cart, temp], prevPrice);
     db.getCart();
-    return CartState(cart: [...state.cart, temp]);
+    return CartState(cart: [...state.cart, temp], totalPrice: prevPrice);
   } else if (action is UpdateCartAction) {
+    // Update Cart...
     List<Product> tempCart = state.cart;
+    int prevPrice = state.totalPrice;
     int index =
         tempCart.indexWhere((element) => element.id == action.product.id);
+    prevPrice -= tempCart[index].price * tempCart[index].quantity;
+    prevPrice += action.product.price * action.product.quantity;
     tempCart[index].quantity = action.productQty;
-    db.saveCart([...tempCart]);
+    db.saveCart([...tempCart], prevPrice);
     db.getCart();
-    return CartState(cart: [...tempCart]);
+    return CartState(
+      cart: [...tempCart],
+      totalPrice: prevPrice,
+    );
   } else if (action is RemovefromCartAction) {
+    // Remove from Cart...
     List<Product> tempCart = state.cart;
-    tempCart.removeWhere((element) => element.id == action.product.id);
-    db.saveCart([...tempCart]);
+    int prevPrice = state.totalPrice;
+    int index =
+        tempCart.indexWhere((element) => element.id == action.product.id);
+    prevPrice -= tempCart[index].price * tempCart[index].quantity;
+    tempCart.removeAt(index);
+    db.saveCart([...tempCart], prevPrice);
     db.getCart();
-    return CartState(cart: [...tempCart]);
+    return CartState(cart: [...tempCart], totalPrice: prevPrice);
   } else if (action is DeleteCartAction) {
-    db.saveCart([]);
+    // Detete Cart...
+    db.saveCart([], 0);
     db.getCart();
-    return CartState(cart: []);
+    return CartState(cart: [], totalPrice: 0);
   } else if (action is SetCartAction) {
-    return CartState(cart: action.cart);
+    // Set Cart...
+    return CartState(cart: action.cart, totalPrice: action.cartTotalPrice);
   }
   return state;
 }

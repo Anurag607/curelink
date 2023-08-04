@@ -21,6 +21,7 @@ class CureLinkDatabase {
 
   // type: List<Map<string, dynamic>>
   late List<Product> cart = [];
+  int cartTotalPrice = 0;
 
   final _curelinkData = Hive.box('curelinkData');
 
@@ -47,14 +48,16 @@ class CureLinkDatabase {
 // ################################### CART ###################################
 
   // Function to save the cart...
-  void saveCart(List<Product> cartData) {
+  void saveCart(List<Product> cartData, int cartCost) {
     log('Saving cart...');
     _curelinkData.put('cart', cartData);
+    _curelinkData.put('cartCost', cartCost);
   }
 
   // Function to get the cart...
   void getCart() {
     cart = [..._curelinkData.get('cart')];
+    cartTotalPrice = _curelinkData.get('cartCost');
     log('got_cart: ${cart.length}');
   }
 
@@ -83,8 +86,9 @@ class CureLinkDatabase {
       return;
     }
 
+    cartTotalPrice += item.price;
     cart.add(item);
-    saveCart(cart);
+    saveCart(cart, cartTotalPrice);
     getCart();
   }
 
@@ -96,8 +100,9 @@ class CureLinkDatabase {
 
     if (ls[0]) {
       log('Item found in cart...');
+      cartTotalPrice -= cart[ls[1]].price;
       cart.removeAt(ls[1]);
-      saveCart(cart);
+      saveCart(cart, cartTotalPrice);
       getCart();
     } else {
       log('Item not found in cart...');
@@ -108,7 +113,7 @@ class CureLinkDatabase {
   void clearCart() {
     log('Clearing cart...');
     cart.clear();
-    saveCart(cart);
+    saveCart(cart, 0);
     getCart();
   }
 

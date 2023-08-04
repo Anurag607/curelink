@@ -44,7 +44,7 @@ class _TopBarState extends State<TopBar> {
           builder: (BuildContext context, dynamic userDetails) => Container(
             width: double.infinity,
             color: Colors.transparent,
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -92,7 +92,9 @@ class _TopBarState extends State<TopBar> {
                         padding: const EdgeInsets.only(top: 0, right: 6),
                         child: IconButton.filledTonal(
                           color: HexColor("#5a73d8"),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/notifications');
+                          },
                           icon: const Icon(Ionicons.notifications),
                         )),
                     IconButton.filledTonal(

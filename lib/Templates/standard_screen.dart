@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:curelink/utils/database.dart';
@@ -13,7 +14,17 @@ class ThemedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       backgroundColor: HexColor("#5D3FD3"),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        toolbarHeight: 0,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.light,
+        ),
+      ),
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -60,7 +71,7 @@ class ThemedScreen extends StatelessWidget {
                     children: [
                       const SizedBox(height: 40),
                       Container(
-                          margin: const EdgeInsets.symmetric(vertical: 35),
+                          margin: const EdgeInsets.only(bottom: 35, top: 0),
                           child: topBar),
                       child,
                     ],

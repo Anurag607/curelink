@@ -6,6 +6,7 @@ import 'package:curelink/utils/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class LoginPage extends StatefulWidget {
@@ -202,23 +203,49 @@ class _LoginPageState extends State<LoginPage> {
                                                 });
 
                                                 await FireAuth
-                                                    .signInUsingEmailPassword(
+                                                        .signInUsingEmailPassword(
                                                   email:
                                                       _emailTextController.text,
                                                   password:
                                                       _passwordTextController
                                                           .text,
                                                   context: context,
-                                                ).then((value) => {
-                                                      db.saveUserDetails({
-                                                        "displayName":
-                                                            value!.displayName,
-                                                        "email": value.email,
-                                                        "auth_uid": value.uid,
-                                                        "phoneNumber":
-                                                            value.phoneNumber,
-                                                      })
-                                                    });
+                                                )
+                                                    .then((value) => {
+                                                          db.saveUserDetails({
+                                                            "displayName": value
+                                                                ?.displayName,
+                                                            "email":
+                                                                value.email,
+                                                            "auth_uid":
+                                                                value.uid,
+                                                            "phoneNumber": value
+                                                                .phoneNumber,
+                                                          })
+                                                        })
+                                                    .catchError((err) {
+                                                  final snackBar = SnackBar(
+                                                    backgroundColor: Colors.red,
+                                                    duration: const Duration(
+                                                        milliseconds: 200),
+                                                    content: Text(
+                                                      'Login Failed!',
+                                                      style:
+                                                          GoogleFonts.comfortaa(
+                                                        textStyle: TextStyle(
+                                                          color: HexColor(
+                                                              "#f6f8fe"),
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(snackBar);
+                                                  return err;
+                                                });
 
                                                 setState(() {
                                                   _isProcessing = false;

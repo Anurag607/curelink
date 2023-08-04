@@ -1,5 +1,11 @@
 // ignore_for_file: unused_import
+import 'dart:io';
+import 'dart:developer' as dev;
 
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:curelink/fcm_api.dart';
+import 'package:curelink/pages/notification_page.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:curelink/models/appointment.dart';
 import 'package:curelink/models/doctor.dart';
 import 'package:curelink/pages/Store/home_screen.dart';
@@ -24,17 +30,53 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'models/menu.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
+Future<bool> checkConnection() async {
+  var connectivityResult = await (Connectivity().checkConnectivity());
+  if (connectivityResult == ConnectivityResult.none) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 void main() async {
+  await dotenv.load(fileName: ".env");
+  bool isConnected = false;
+  await checkConnection().then((value) {
+    if (value == false) {
+      isConnected = false;
+    } else {
+      isConnected = true;
+    }
+  });
   await Hive.initFlutter();
   Hive.registerAdapter(DoctorAdapter());
   Hive.registerAdapter(AppointmentAdapter());
   Hive.registerAdapter(ProductAdapter());
   await Hive.openBox('curelinkData');
-  runApp(MyApp());
+  if (isConnected) {
+    await Firebase.initializeApp();
+    await FCMApi().initNotification();
+    HttpOverrides.global = MyHttpOverrides();
+    WidgetsFlutterBinding.ensureInitialized();
+  }
+  runApp(MyApp(isConnected: isConnected));
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  MyApp({super.key, required this.isConnected});
+  final bool isConnected;
 
   final Store<NavigationState> _bottomnavbarStore = Store<NavigationState>(
     navigationReducer,
@@ -58,13 +100,16 @@ class MyApp extends StatelessWidget {
     updateCurrentProductReducer,
     initialState: CurrentProductState(
       currentProduct: null,
-      currentProductQty: 1,
+      currentProductQty: 0,
     ),
   );
 
   final Store<CartState> _cartStore = Store<CartState>(
     updateCartReducer,
-    initialState: CartState(cart: []),
+    initialState: CartState(
+      cart: [],
+      totalPrice: 0,
+    ),
   );
 
   @override
@@ -90,12 +135,14 @@ class MyApp extends StatelessWidget {
                   scaffoldBackgroundColor: HexColor("#f6f8fe"),
                   useMaterial3: true,
                 ),
+                navigatorKey: navigatorKey,
                 initialRoute: '/',
                 routes: {
-                  '/': (context) => const MainPage(),
+                  '/': (context) => MainPage(isConnected: isConnected),
                   '/login': (context) => const LoginPage(),
                   '/signup': (context) => const SignupPage(),
                   '/store': (context) => const StorePage(),
+                  '/notifications': (context) => const NotificationPage(),
                 },
               ),
             ),

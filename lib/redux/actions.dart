@@ -45,7 +45,8 @@ class UpdateCartAction {
 
 class SetCartAction {
   List<Product> cart;
-  SetCartAction(this.cart);
+  int cartTotalPrice;
+  SetCartAction(this.cart, this.cartTotalPrice);
 }
 
 class DeleteCartAction {

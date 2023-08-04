@@ -3,7 +3,6 @@
 import 'dart:collection';
 
 import 'package:curelink/components/appointment_cards.dart';
-import 'package:curelink/components/custom_modal_bottom_sheet.dart';
 import 'package:curelink/models/appointment.dart';
 import 'package:curelink/utils/database.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:curelink/utils/appointments.dart';
-import 'dart:developer';
 
 class Calendar extends StatefulWidget {
   const Calendar({super.key});

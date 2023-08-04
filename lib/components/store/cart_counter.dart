@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:curelink/redux/actions.dart';
 import 'package:curelink/redux/states/cart_state.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +7,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 
 class CartCounter extends StatefulWidget {
   final bool inCart;
-  const CartCounter({super.key, required this.inCart});
+  final int qty;
+  const CartCounter({super.key, required this.inCart, required this.qty});
 
   @override
   State<CartCounter> createState() => _CartCounterState();
@@ -13,11 +16,13 @@ class CartCounter extends StatefulWidget {
 
 class _CartCounterState extends State<CartCounter> {
   late bool inCart = false;
+  late int qty = 0;
 
   @override
   void initState() {
     super.initState();
     inCart = widget.inCart;
+    qty = widget.qty;
   }
 
   @override
@@ -30,19 +35,24 @@ class _CartCounterState extends State<CartCounter> {
             buildOutlineButton(
               icon: Icons.remove,
               press: () {
-                if (currentProductDetails.currentProductQty <= 1 && inCart) {
+                log(qty.toString());
+                if (currentProductDetails.currentProductQty <= 1) {
+                  qty = 0;
                   setState(
                     () {
-                      StoreProvider.of<CartState>(context).dispatch(
-                        RemovefromCartAction(
-                          currentProductDetails.currentProduct,
-                        ),
-                      );
+                      if (inCart) {
+                        StoreProvider.of<CartState>(context).dispatch(
+                          RemovefromCartAction(
+                            currentProductDetails.currentProduct,
+                          ),
+                        );
+                      }
                       currentProductDetails.currentProductQty = 0;
                     },
                   );
                   return;
                 } else if (currentProductDetails.currentProductQty > 1) {
+                  qty -= 1;
                   setState(
                     () {
                       StoreProvider.of<CurrentProductState>(context).dispatch(
@@ -59,9 +69,7 @@ class _CartCounterState extends State<CartCounter> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20 / 2),
               child: Text(
-                currentProductDetails.currentProductQty
-                    .toString()
-                    .padLeft(2, "0"),
+                (qty < 10) ? qty.toString().padLeft(2, "0") : qty.toString(),
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
@@ -70,6 +78,7 @@ class _CartCounterState extends State<CartCounter> {
               press: () {
                 setState(
                   () {
+                    qty += 1;
                     StoreProvider.of<CurrentProductState>(context).dispatch(
                       UpdateCurrentProductAction(
                         currentProductDetails.currentProduct,

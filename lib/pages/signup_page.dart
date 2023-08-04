@@ -6,6 +6,7 @@ import 'package:curelink/utils/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class SignupPage extends StatefulWidget {
@@ -223,75 +224,99 @@ class _SignupPageState extends State<SignupPage> {
                                 : FadeAnimation(
                                     1.9,
                                     TextButton(
-                                        onPressed: () async {
-                                          _focusEmail.unfocus();
-                                          _focusPassword.unfocus();
-                                          _focusPhone.unfocus();
-                                          _focusName.unfocus();
+                                      onPressed: () async {
+                                        _focusEmail.unfocus();
+                                        _focusPassword.unfocus();
+                                        _focusPhone.unfocus();
+                                        _focusName.unfocus();
 
-                                          if (_registerFormKey.currentState!
-                                              .validate()) {
-                                            setState(() {
-                                              isProcessing = true;
-                                            });
-                                            FireAuth.registerUsingEmailPassword(
-                                              context: context,
-                                              name: _nameTextController.text,
-                                              email: _emailTextController.text,
-                                              password:
-                                                  _passwordTextController.text,
-                                              phoneNumber:
-                                                  _phoneNumberTextController
-                                                      .text,
-                                            ).then((value) => {
-                                                  db.saveUserDetails({
-                                                    "displayName":
-                                                        value!.displayName,
-                                                    "email": value.email,
-                                                    "auth_uid": value.uid,
-                                                    "phoneNumber":
-                                                        value.phoneNumber,
+                                        if (_registerFormKey.currentState!
+                                            .validate()) {
+                                          setState(() {
+                                            isProcessing = true;
+                                          });
+                                          FireAuth.registerUsingEmailPassword(
+                                            context: context,
+                                            name: _nameTextController.text,
+                                            email: _emailTextController.text,
+                                            password:
+                                                _passwordTextController.text,
+                                            phoneNumber:
+                                                _phoneNumberTextController.text,
+                                          )
+                                              .then((value) => {
+                                                    db.saveUserDetails({
+                                                      "displayName":
+                                                          value!.displayName,
+                                                      "email": value.email,
+                                                      "auth_uid": value.uid,
+                                                      "phoneNumber":
+                                                          value.phoneNumber,
+                                                    })
                                                   })
-                                                });
+                                              .catchError((err) {
+                                            final snackBar = SnackBar(
+                                              backgroundColor: Colors.red,
+                                              duration: const Duration(
+                                                  milliseconds: 200),
+                                              content: Text(
+                                                'Signup Failed!',
+                                                style: GoogleFonts.comfortaa(
+                                                  textStyle: TextStyle(
+                                                    color: HexColor("#f6f8fe"),
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(snackBar);
+                                            return err;
+                                          });
 
-                                            setState(() {
-                                              isProcessing = false;
-                                            });
-                                          }
-                                        },
-                                        child: Container(
-                                          height: 50,
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 60),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            color: const Color.fromRGBO(
-                                                49, 39, 79, 1),
+                                          setState(() {
+                                            isProcessing = false;
+                                          });
+                                        }
+                                      },
+                                      child: Container(
+                                        height: 50,
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 60),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          color: const Color.fromRGBO(
+                                              49, 39, 79, 1),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            "SignUp",
+                                            style: TextStyle(
+                                                color: HexColor("#f6f8fe")),
                                           ),
-                                          child: Center(
-                                            child: Text(
-                                              "SignUp",
-                                              style: TextStyle(
-                                                  color: HexColor("#f6f8fe")),
-                                            ),
-                                          ),
-                                        ))),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                             const SizedBox(height: 30),
                             // Create Account...
                             FadeAnimation(
-                                2,
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.pushNamed(context, '/login');
-                                    },
-                                    child: const Center(
-                                        child: Text(
-                                      "Already have an account? Login In",
-                                      style: TextStyle(
-                                          color:
-                                              Color.fromRGBO(49, 39, 79, .6)),
-                                    )))),
+                              2,
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/login');
+                                },
+                                child: const Center(
+                                  child: Text(
+                                    "Already have an account? Login In",
+                                    style: TextStyle(
+                                        color: Color.fromRGBO(49, 39, 79, .6)),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       )
