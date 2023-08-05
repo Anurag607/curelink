@@ -11,7 +11,7 @@ class CustomBottomModalSheet {
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20)),
         ),
-        backgroundColor: HexColor("#102844"),
+        backgroundColor: HexColor("#f6f8fe"),
         enableDrag: true,
         showDragHandle: false,
         builder: (context) {

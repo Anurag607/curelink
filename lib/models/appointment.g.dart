@@ -23,13 +23,14 @@ class AppointmentAdapter extends TypeAdapter<Appointment> {
       appointmentTime: (fields[4] as List).cast<DateTime>(),
       desc: fields[2] as String,
       appointmentDate: fields[3] as DateTime,
+      isDone: fields[6] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, Appointment obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.image)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class AppointmentAdapter extends TypeAdapter<Appointment> {
       ..writeByte(4)
       ..write(obj.appointmentTime)
       ..writeByte(5)
-      ..write(obj.id);
+      ..write(obj.id)
+      ..writeByte(6)
+      ..write(obj.isDone);
   }
 
   @override

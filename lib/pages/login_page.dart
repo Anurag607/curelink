@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:curelink/Animations/fade_animation.dart';
 import 'package:curelink/Firebase/fire_auth.dart';
 import 'package:curelink/utils/database.dart';
@@ -214,14 +216,17 @@ class _LoginPageState extends State<LoginPage> {
                                                     .then((value) => {
                                                           db.saveUserDetails({
                                                             "displayName": value
-                                                                ?.displayName,
+                                                                .displayName,
                                                             "email":
                                                                 value.email,
                                                             "auth_uid":
                                                                 value.uid,
                                                             "phoneNumber": value
                                                                 .phoneNumber,
-                                                          })
+                                                          }),
+                                                          log(db
+                                                              .getUserDetails()
+                                                              .toString()),
                                                         })
                                                     .catchError((err) {
                                                   final snackBar = SnackBar(

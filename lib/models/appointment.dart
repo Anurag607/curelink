@@ -17,6 +17,8 @@ class Appointment extends HiveObject {
   final List<DateTime> appointmentTime;
   @HiveField(5)
   final int id;
+  @HiveField(6)
+  final bool isDone;
 
   Appointment({
     required this.id,
@@ -25,5 +27,6 @@ class Appointment extends HiveObject {
     required this.appointmentTime,
     required this.desc,
     required this.appointmentDate,
+    required this.isDone,
   });
 }

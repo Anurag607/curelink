@@ -67,14 +67,48 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  getOrder() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    CollectionReference users = firestore.collection('orders');
+    String uid = db.getUserDetails()["auth_uid"];
+    List<dynamic> cart = [];
+    dynamic temp = {};
+    users.where("user", isEqualTo: uid).get().then((data) => {
+          for (var i in data.docs)
+            {
+              temp["id"] = i.id,
+              temp["cart"] = (i.data() as Map)["cart"],
+              temp["totalCost"] = (i.data() as Map)["totalCost"],
+              cart.add(temp),
+            },
+          log(cart.toString()),
+        });
+  }
+
   updateDB(cart, cost) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference users = firestore.collection('orders');
+    List<dynamic> items = [];
+    dynamic temp = {};
+    for (var item in cart) {
+      temp = {
+        'id': item.id,
+        'image': item.image,
+        'title': item.title,
+        'price': item.price,
+        'description': item.description,
+        'type': item.type,
+        'quantity': item.quantity,
+      };
+      items.add(temp);
+    }
+    String uid = db.getUserDetails()["auth_uid"];
     await users
-        .doc(currentUser?.uid)
-        .set({
-          'cart': cart.toString(),
+        .add({
+          'user': uid,
+          'cart': items,
           'totalCost': cost,
+          'timestamp': DateTime.now(),
         })
         .then((value) => log("User Added"))
         .catchError(
@@ -83,6 +117,12 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
   }
 
   int totalPrice = 0;
+
+  @override
+  void initState() {
+    getOrder();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -154,7 +154,12 @@ class CureLinkDatabase {
 
   // Function to add a appointment item to the appointment list...
   void addAppointment(String date, Map<dynamic, dynamic> appointmentItem) {
-    appointments[date] = [...appointments[date], appointmentItem];
+    log(appointmentItem.toString());
+    if (appointments[date] != null) {
+      appointments[date] = [...appointments[date], appointmentItem];
+    } else {
+      appointments[date] = [appointmentItem];
+    }
     saveAppointments();
     getAppointments();
   }

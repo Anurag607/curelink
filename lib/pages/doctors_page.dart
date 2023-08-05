@@ -182,6 +182,7 @@ class _DoctorsPageState extends State<DoctorsPage>
                                                 .reviews
                                                 .length,
                                             image: searchResults[index].image,
+                                            press: () {},
                                           ),
                                           const SizedBox(
                                             width: double.infinity,

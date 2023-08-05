@@ -1,5 +1,8 @@
 // ignore_for_file: dead_code, use_build_context_synchronously, unused_element
 
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curelink/Firebase/fire_auth.dart';
 import 'package:curelink/models/appointment_data.dart';
 import 'package:curelink/redux/states/user_details_state.dart';
@@ -27,23 +30,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
   List<dynamic> settings = [];
 
-  final List<dynamic> profileOptions = [
-    {
-      "title": "Past Appointments",
-      "icon": const Icon(Ionicons.medkit, size: 30),
-      "onTap": PastAppointmentMenu.ModalBottomSheet
-    },
-    {
-      "title": "Your Orders",
-      "icon": const Icon(Ionicons.cart, size: 30),
-      "onTap": PastOrdersMenu.ModalBottomSheet
-    },
-    {
-      "title": "Settings",
-      "icon": const Icon(Ionicons.settings, size: 30),
-      "onTap": SettingsMenu.ModalBottomSheet
-    },
-  ];
+  PastOrdersMenu pastOrdersMenu = PastOrdersMenu();
+  PastAppointmentMenu pastAppointmentMenu = PastAppointmentMenu();
+  SettingsMenu settingsMenu = SettingsMenu();
+
+  late List<dynamic> profileOptions = [];
 
   List<dynamic> data = [];
 
@@ -61,9 +52,52 @@ class _ProfilePageState extends State<ProfilePage> {
     return firebaseApp;
   }
 
+  getOrders() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    CollectionReference users = firestore.collection('orders');
+    String uid = db.getUserDetails()["auth_uid"];
+    List<dynamic> cart = [];
+    dynamic temp = {};
+    users.where("user", isEqualTo: uid).get().then((data) => {
+          for (var i in data.docs)
+            {
+              temp = {},
+              temp["id"] = i.id,
+              temp["cart"] = (i.data() as Map)["cart"],
+              temp["totalCost"] = (i.data() as Map)["totalCost"],
+              temp["timestamp"] = (i.data() as Map)["timestamp"],
+              cart.add(temp),
+            },
+          log(temp.toString()),
+        });
+
+    return cart;
+  }
+
   @override
   void initState() {
     data = [appointments, orders, settings];
+    getOrders().then((orderData) => {
+          orders = orderData,
+          data[1] = orderData,
+        });
+    profileOptions = [
+      {
+        "title": "Past Appointments",
+        "icon": const Icon(Ionicons.medkit, size: 30),
+        "onTap": pastAppointmentMenu.ModalBottomSheet
+      },
+      {
+        "title": "Your Orders",
+        "icon": const Icon(Ionicons.cart, size: 30),
+        "onTap": pastOrdersMenu.ModalBottomSheet
+      },
+      {
+        "title": "Settings",
+        "icon": const Icon(Ionicons.settings, size: 30),
+        "onTap": settingsMenu.ModalBottomSheet
+      },
+    ];
     super.initState();
   }
 
@@ -176,6 +210,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 physics: const ScrollPhysics(),
                                 itemCount: profileOptions.length,
                                 itemBuilder: (BuildContext context, int index) {
+                                  log(index.toString());
                                   return Column(
                                     children: [
                                       Material(

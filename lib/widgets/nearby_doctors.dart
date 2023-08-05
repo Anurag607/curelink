@@ -75,6 +75,7 @@ class _NearbyDoctorsState extends State<NearbyDoctors> {
                     rating: doctors[index].rating,
                     reviews: doctors[index].reviews.length,
                     image: doctors[index].image,
+                    press: () {},
                   ),
                   const SizedBox(
                     width: double.infinity,

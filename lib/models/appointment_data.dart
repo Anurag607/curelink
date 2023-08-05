@@ -8,6 +8,7 @@ List<Appointment> appointments = [
     appointmentDate: DateTime.now(),
     appointmentTime: [DateTime.now(), DateTime.now()],
     image: "assets/avaters/doctor_1.jpg",
+    isDone: false,
   ),
   Appointment(
     id: 2,
@@ -16,6 +17,7 @@ List<Appointment> appointments = [
     appointmentDate: DateTime.now(),
     appointmentTime: [DateTime.now(), DateTime.now()],
     image: "assets/avaters/doctor_2.jpg",
+    isDone: false,
   ),
   Appointment(
     id: 3,
@@ -24,6 +26,7 @@ List<Appointment> appointments = [
     appointmentDate: DateTime.now(),
     appointmentTime: [DateTime.now(), DateTime.now()],
     image: "assets/avaters/doctor_3.jpg",
+    isDone: false,
   ),
 ];
 
@@ -35,6 +38,7 @@ List<Appointment> doctorList = [
     appointmentDate: DateTime.now(),
     appointmentTime: [DateTime.now(), DateTime.now()],
     image: "assets/avaters/doctor_1.jpg",
+    isDone: false,
   ),
   Appointment(
     id: 2,
@@ -43,6 +47,7 @@ List<Appointment> doctorList = [
     appointmentDate: DateTime.now(),
     appointmentTime: [DateTime.now(), DateTime.now()],
     image: "assets/avaters/doctor_2.jpg",
+    isDone: false,
   ),
   Appointment(
     id: 3,
@@ -51,5 +56,6 @@ List<Appointment> doctorList = [
     appointmentDate: DateTime.now(),
     appointmentTime: [DateTime.now(), DateTime.now()],
     image: "assets/avaters/doctor_3.jpg",
+    isDone: false,
   ),
 ];

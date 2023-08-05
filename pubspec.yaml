@@ -65,6 +65,8 @@ dependencies:
   flutter_dotenv: ^5.1.0
   device_info_plus: ^9.0.2
   timeline_tile: ^2.0.0
+  flutter_chat_ui: ^1.6.9
+  flutter_chat_types: ^3.6.2
 
 dev_dependencies:
   flutter_test:

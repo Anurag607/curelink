@@ -8,6 +8,7 @@ class DoctorCards extends StatelessWidget {
   final double rating;
   final int reviews;
   final String image;
+  final VoidCallback press;
 
   const DoctorCards(
       {required this.name,
@@ -15,13 +16,16 @@ class DoctorCards extends StatelessWidget {
       required this.rating,
       required this.reviews,
       required this.image,
+      required this.press,
       Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => {},
+      onTap: () => {
+        press(),
+      },
       borderRadius: const BorderRadius.all(Radius.circular(20)),
       child: Ink(
         decoration: BoxDecoration(

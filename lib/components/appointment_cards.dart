@@ -1,3 +1,6 @@
+import 'package:curelink/components/custom_modal_bottom_sheet.dart';
+import 'package:curelink/components/edit_task_form.dart';
+import 'package:curelink/utils/database.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ionicons/Ionicons.dart';
@@ -10,6 +13,8 @@ class AppointmentCards extends StatelessWidget {
   final String appointmentTime;
   final String image;
   final String type;
+  final String dateString;
+  final int appointmentIndex;
 
   const AppointmentCards(
       {required this.actions,
@@ -19,11 +24,14 @@ class AppointmentCards extends StatelessWidget {
       required this.appointmentTime,
       required this.image,
       required this.type,
+      required this.dateString,
+      required this.appointmentIndex,
       Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    CureLinkDatabase db = CureLinkDatabase();
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       margin: const EdgeInsets.only(bottom: 20),
@@ -47,7 +55,7 @@ class AppointmentCards extends StatelessWidget {
             borderRadius: const BorderRadius.all(Radius.circular(16)),
             child: Image.asset(
               image,
-              width: 80,
+              width: 65,
               height: 94,
               fit: BoxFit.cover,
               repeat: ImageRepeat.noRepeat,
@@ -142,7 +150,9 @@ class AppointmentCards extends StatelessWidget {
                             color: HexColor("#5a73d8"),
                           ),
                         ),
-                        onPressed: () => {},
+                        onPressed: () => {
+                          db.deleteAppointment(dateString, appointmentIndex),
+                        },
                         child: Text(
                           'Cancel',
                           style: TextStyle(
@@ -161,7 +171,16 @@ class AppointmentCards extends StatelessWidget {
                           backgroundColor: HexColor("#5a73d8"),
                           padding: const EdgeInsets.symmetric(horizontal: 18),
                         ),
-                        onPressed: () => {},
+                        onPressed: () => {
+                          CustomBottomModalSheet.customBottomModalSheet(
+                            context,
+                            400,
+                            EditTaskForm(
+                              dateString: dateString,
+                              appointmentIndex: appointmentIndex,
+                            ),
+                          ),
+                        },
                         child: Text(
                           'Reschedule',
                           style: TextStyle(

@@ -2,7 +2,6 @@ import 'package:curelink/pages/profile_page.dart';
 import 'package:curelink/pages/schedule_page.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:curelink/utils/database.dart';
 
 import '../../../models/menu.dart';
@@ -23,7 +22,6 @@ class SideBar extends StatefulWidget {
 }
 
 class _SideBarState extends State<SideBar> {
-  final _curelinkData = Hive.box('curelinkData');
   CureLinkDatabase db = CureLinkDatabase();
 
   late VoidCallback _closeSidebar;
@@ -31,12 +29,6 @@ class _SideBarState extends State<SideBar> {
   @override
   void initState() {
     _closeSidebar = widget.closeSidebar;
-
-    if (_curelinkData.get("userDetails") == null) {
-      // db.saveUserDetails();
-    } else {
-      // db.getUserDetails();
-    }
 
     super.initState();
   }
