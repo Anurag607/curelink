@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "174102162921",
+    "project_id": "curelink-86300",
+    "storage_bucket": "curelink-86300.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:174102162921:android:7b702774e4a417bd5b2f78",
+        "android_client_info": {
+          "package_name": "com.example.curelink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "174102162921-m0lrf32a9m2akh4la633a9fi693q210d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.curelink",
+            "certificate_hash": "babc074d3792e17d404aef136bb5d407e8eb7257"
+          }
+        },
+        {
+          "client_id": "174102162921-mbroa93qh54ahd84q0a4drqigbj7ak32.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlDYxiW8OXeMjZDnNRf7SIwBojj0Py2k0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "174102162921-mbroa93qh54ahd84q0a4drqigbj7ak32.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "174102162921-cfjvk62rtrancbov8l189e8alj4jaht0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.curelink.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
