@@ -101,9 +101,9 @@ class FCMApi {
       "registration_ids": userToken,
       "collapse_key": "type_a",
       "notification": {
-        "title": 'Hello OruPhones,',
+        "title": 'Hello from Curelink,',
         "body":
-            'This is the assignment as per the given requirements. Take a look!',
+            'This is my take on a e-health/appointment booking app which comes with a store as well. Take a look!',
         "image": "https://cdn-icons-png.flaticon.com/128/9437/9437514.png",
         "name": "Demo FCM push notification",
       }
