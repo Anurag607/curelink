@@ -67,7 +67,7 @@ void main() async {
   await Hive.openBox('curelinkData');
   if (isConnected) {
     await Firebase.initializeApp();
-    await FCMApi().initNotification();
+    // await FCMApi().initNotification();
     HttpOverrides.global = MyHttpOverrides();
     WidgetsFlutterBinding.ensureInitialized();
   }
