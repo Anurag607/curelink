@@ -148,7 +148,7 @@ class _MainPageState extends State<MainPage>
                   backgroundColor: HexColor("#666fdb"),
                   body: SwipeTo(
                     iconColor: Colors.transparent,
-                    onRightSwipe: () {
+                    onRightSwipe: (DragUpdateDetails details) {
                       isMenuOpenInput.value = true;
                       _animationController.forward();
                       setState(
@@ -157,7 +157,7 @@ class _MainPageState extends State<MainPage>
                         },
                       );
                     },
-                    onLeftSwipe: () {
+                    onLeftSwipe: (DragUpdateDetails details) {
                       isMenuOpenInput.value = false;
                       _animationController.reverse();
                       setState(
