@@ -17,8 +17,7 @@ class DoctorCards extends StatelessWidget {
       required this.reviews,
       required this.image,
       required this.press,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   Widget build(BuildContext context) {

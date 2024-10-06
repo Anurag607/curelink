@@ -12,7 +12,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:rive/rive.dart';
+import 'package:rive/rive.dart' as rive;
 import 'package:swipe_to/swipe_to.dart';
 import 'package:curelink/pages/home_page.dart';
 import 'package:curelink/widgets/custom_bottomnavbar.dart';
@@ -44,7 +44,7 @@ class _MainPageState extends State<MainPage>
 
   bool isSideBarOpen = false;
   Menu selectedSideMenu = sidebarMenus.first;
-  late SMIBool isMenuOpenInput;
+  late rive.SMIBool isMenuOpenInput;
 
   // Animation Controllers...
   late final AnimationController _animationController = AnimationController(
@@ -243,13 +243,13 @@ class _MainPageState extends State<MainPage>
                               hide: isSideBarOpen && false,
                               riveOnInit: (artboard) {
                                 final controller =
-                                    StateMachineController.fromArtboard(
+                                    rive.StateMachineController.fromArtboard(
                                         artboard, "State Machine");
 
                                 artboard.addController(controller!);
 
                                 isMenuOpenInput = controller
-                                    .findInput<bool>("isOpen") as SMIBool;
+                                    .findInput<bool>("isOpen") as rive.SMIBool;
                                 isMenuOpenInput.value = true;
                               },
                             ),

@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, unrelated_type_equality_checks
 import 'dart:io';
 import 'dart:developer' as dev;
 

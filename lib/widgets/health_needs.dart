@@ -4,7 +4,7 @@ import "package:flutter/material.dart";
 import "package:ionicons/ionicons.dart";
 
 class HealthNeeds extends StatelessWidget {
-  const HealthNeeds({Key? key}) : super(key: key);
+  const HealthNeeds({super.key});
 
   void demoFunction(context, msg) {
     final snackBar = SnackBar(

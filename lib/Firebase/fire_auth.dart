@@ -1,4 +1,4 @@
-// ignore_for_file: body_might_complete_normally_catch_error, invalid_return_type_for_catch_error, use_build_context_synchronously
+// ignore_for_file: body_might_complete_normally_catch_error, invalid_return_type_for_catch_error, use_build_context_synchronously, deprecated_member_use
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curelink/redux/actions.dart';

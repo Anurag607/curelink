@@ -104,8 +104,7 @@ class CartCard extends StatelessWidget {
   final Product product;
   final VoidCallback press;
 
-  const CartCard({required this.product, required this.press, Key? key})
-      : super(key: key);
+  const CartCard({required this.product, required this.press, super.key});
 
   @override
   Widget build(BuildContext context) {

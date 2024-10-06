@@ -26,8 +26,7 @@ class AppointmentCards extends StatelessWidget {
       required this.type,
       required this.dateString,
       required this.appointmentIndex,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   Widget build(BuildContext context) {

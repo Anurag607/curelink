@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, unused_element
 
 import 'dart:collection';
 
@@ -451,14 +451,14 @@ class _CalendarHeader extends StatelessWidget {
   final bool clearButtonVisible;
 
   const _CalendarHeader({
-    Key? key,
+    super.key,
     required this.focusedDay,
     required this.onLeftArrowTap,
     required this.onRightArrowTap,
     required this.onTodayButtonTap,
     required this.onClearButtonTap,
     required this.clearButtonVisible,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

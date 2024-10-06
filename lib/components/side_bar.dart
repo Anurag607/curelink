@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:curelink/pages/profile_page.dart';
 import 'package:curelink/pages/schedule_page.dart';
 import 'package:flutter/material.dart';
@@ -116,7 +118,7 @@ class _SideBarState extends State<SideBar> {
                         },
                       );
                     },
-                  ).toList(),
+                  ),
                   Padding(
                     padding:
                         const EdgeInsets.only(left: 24, top: 40, bottom: 16),
@@ -128,51 +130,45 @@ class _SideBarState extends State<SideBar> {
                           .copyWith(color: HexColor("#f6f8fe")),
                     ),
                   ),
-                  ...sidebarMenus2
-                      .map(
-                        (menu) => StoreConnector<NavigationState, int>(
-                          converter: (store) => store.state.tabIndex,
-                          builder: (context, int stateNavigationIndex) =>
-                              SideMenu(
-                            menu: menu,
-                            dispatch: () {
-                              if (menu.title == "Previous Appointments") {
-                                Future.delayed(
-                                        const Duration(milliseconds: 210))
-                                    .then(
-                                  (_) => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Container(),
-                                    ),
-                                  ),
-                                );
-                              } else if (menu.title == "Settings & Privacy") {
-                                Future.delayed(
-                                        const Duration(milliseconds: 210))
-                                    .then(
-                                  (_) => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Container(),
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
-                            closeSidebar: _closeSidebar,
-                            press: () {
-                              RiveUtils.chnageSMIBoolState(menu.rive.status!);
-                            },
-                            riveOnInit: (artboard) {
-                              menu.rive.status = RiveUtils.getRiveInput(
-                                  artboard,
-                                  stateMachineName: menu.rive.stateMachineName);
-                            },
-                          ),
-                        ),
-                      )
-                      .toList(),
+                  ...sidebarMenus2.map(
+                    (menu) => StoreConnector<NavigationState, int>(
+                      converter: (store) => store.state.tabIndex,
+                      builder: (context, int stateNavigationIndex) => SideMenu(
+                        menu: menu,
+                        dispatch: () {
+                          if (menu.title == "Previous Appointments") {
+                            Future.delayed(const Duration(milliseconds: 210))
+                                .then(
+                              (_) => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Container(),
+                                ),
+                              ),
+                            );
+                          } else if (menu.title == "Settings & Privacy") {
+                            Future.delayed(const Duration(milliseconds: 210))
+                                .then(
+                              (_) => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Container(),
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                        closeSidebar: _closeSidebar,
+                        press: () {
+                          RiveUtils.chnageSMIBoolState(menu.rive.status!);
+                        },
+                        riveOnInit: (artboard) {
+                          menu.rive.status = RiveUtils.getRiveInput(artboard,
+                              stateMachineName: menu.rive.stateMachineName);
+                        },
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 75),
                 ],
               ),
