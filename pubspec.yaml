@@ -40,7 +40,7 @@ dependencies:
   curved_navigation_bar: ^1.0.3
   hidden_drawer_menu: ^3.0.1
   simple_animations: ^5.0.2
-  intl: ^0.19.0
+  intl: ^0.20.1
   firebase_auth: ^5.3.1
   firebase_core: ^3.6.0
   firebase_database: ^11.1.4
@@ -58,9 +58,9 @@ dependencies:
   flutter_svg: ^2.0.7
   http: ^1.1.0
   connectivity_plus: ^6.0.5
-  flutter_local_notifications: ^17.2.3
+  flutter_local_notifications: ^18.0.1
   flutter_dotenv: ^5.1.0
-  device_info_plus: ^10.1.2
+  device_info_plus: ^11.2.0
   timeline_tile: ^2.0.0
   flutter_chat_ui: ^1.6.9
   flutter_chat_types: ^3.6.2
